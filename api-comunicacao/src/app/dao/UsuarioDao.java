@@ -1,6 +1,6 @@
-package src.app.dao;
+package app.dao;
 
-import src.app.model.Usuario;
+import app.model.Usuario;
 
 public interface UsuarioDao {
 	public void salvarUsuario(Usuario val);

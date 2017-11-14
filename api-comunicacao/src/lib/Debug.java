@@ -1,4 +1,4 @@
-package src.lib;
+package lib;
 
 public class Debug {
 	private static final String PREFIXO = "DEBUG {:tipo} | {:msg}";

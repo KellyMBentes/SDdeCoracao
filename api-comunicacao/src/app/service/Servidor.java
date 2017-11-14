@@ -1,15 +1,15 @@
-package src.app.service;
+package app.service;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 
-import src.app.conf.Configuracao;
-import src.app.controller.Controle;
-import src.api_comunicacao.RespostaServidor;
-import src.app.model.Mensagem;
-import src.app.model.Usuario;
-import src.lib.Debug;
+import app.conf.Configuracao;
+import app.controller.Controle;
+import api_comunicacao.RespostaServidor;
+import app.model.Mensagem;
+import app.model.Usuario;
+import lib.Debug;
 
 public abstract class Servidor {
   public void ligar(RespostaServidor callback) {

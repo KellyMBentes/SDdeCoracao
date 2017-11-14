@@ -1,4 +1,4 @@
-package src.lib;
+package lib;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

@@ -1,9 +1,9 @@
-package src.api_comunicacao;
+package api_comunicacao;
 
-import src.app.controller.Controle;
-import src.app.conf.Configuracao;
-import src.app.model.Usuario;
-import src.app.model.Mensagem;
+import app.controller.Controle;
+import app.conf.Configuracao;
+import app.model.Usuario;
+import app.model.Mensagem;
 
 public class APIComunicacao {
 	private static final String FLAG_ROOT = "--root";

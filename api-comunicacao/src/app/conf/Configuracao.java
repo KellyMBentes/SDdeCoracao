@@ -1,4 +1,4 @@
-package src.app.conf;
+package app.conf;
 
 import java.io.IOException;
 import org.json.simple.JSONObject;
@@ -7,9 +7,9 @@ import org.json.simple.parser.ParseException;
 import java.util.List;
 import java.util.ArrayList;
 
-import src.lib.JSONDAO;
-import src.lib.RelativePath;
-import src.lib.Debug;
+import lib.JSONDAO;
+import lib.RelativePath;
+import lib.Debug;
 
 public class Configuracao {
 	

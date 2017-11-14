@@ -1,7 +1,7 @@
-package src.app.model;
+package app.model;
 
-import src.lib.IllegalArgumentStrException;
-import src.lib.Debug;
+import lib.IllegalArgumentStrException;
+import lib.Debug;
 
 public class Mensagem {
 

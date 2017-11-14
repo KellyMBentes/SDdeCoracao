@@ -1,6 +1,6 @@
-package src.app.service;
+package app.service;
 import java.net.Socket;
-import src.app.model.Mensagem;
+import app.model.Mensagem;
 
 public class ServidorXML extends Servidor {
 	public void escrever(Socket cliente, Mensagem mensagem){

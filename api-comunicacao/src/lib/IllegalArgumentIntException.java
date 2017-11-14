@@ -1,4 +1,4 @@
-package src.lib;
+package lib;
 
 public class IllegalArgumentIntException extends java.lang.Exception {
 	private static final String EXC_MSG_NULL_PARAM_INT = "{:className}: O atributo {:attribute} não pode ser negativo";

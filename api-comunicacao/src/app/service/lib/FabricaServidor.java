@@ -1,7 +1,7 @@
-package src.app.service.lib;
+package app.service.lib;
 
-import src.app.service.Servidor;
-import src.app.service.ServidorXML;
+import app.service.Servidor;
+import app.service.ServidorXML;
 
 public class FabricaServidor {
 

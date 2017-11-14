@@ -1,4 +1,4 @@
-package src.app.dao;
+package app.dao;
 
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
@@ -9,9 +9,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import src.app.model.Usuario;
-import src.app.conf.Configuracao;
-import src.lib.Debug;
+import app.model.Usuario;
+import app.conf.Configuracao;
+import lib.Debug;
 
 public class UsuarioCSVDao implements UsuarioDao {
 	private static final String CONF_REPOSITORIO = "repositorio_usuario_csv";

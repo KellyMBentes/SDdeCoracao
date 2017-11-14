@@ -1,7 +1,7 @@
-package src.app.service.lib;
+package app.service.lib;
 
-import src.app.service.Cliente;
-import src.app.service.ClienteXML;
+import app.service.Cliente;
+import app.service.ClienteXML;
 
 public class FabricaCliente {
 

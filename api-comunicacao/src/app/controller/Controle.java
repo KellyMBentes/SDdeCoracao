@@ -1,15 +1,15 @@
-package src.app.controller;
+package app.controller;
 
-import src.app.model.Usuario;
-import src.app.model.Mensagem;
-import src.app.conf.Configuracao;
-import src.app.dao.UsuarioCSVDao;
-import src.app.service.Cliente;
-import src.app.service.Servidor;
-import src.app.service.lib.FabricaCliente;
-import src.app.service.lib.FabricaServidor;
-import src.api_comunicacao.RespostaServidor;
-import src.lib.Debug;
+import app.model.Usuario;
+import app.model.Mensagem;
+import app.conf.Configuracao;
+import app.dao.UsuarioCSVDao;
+import app.service.Cliente;
+import app.service.Servidor;
+import app.service.lib.FabricaCliente;
+import app.service.lib.FabricaServidor;
+import api_comunicacao.RespostaServidor;
+import lib.Debug;
 
 public class Controle { 
 

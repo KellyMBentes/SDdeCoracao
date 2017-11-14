@@ -1,12 +1,12 @@
-package src.app.service;
+package app.service;
 
 import java.io.IOException;
 import java.net.*;
 
-import src.app.conf.Configuracao;
-import src.app.model.Mensagem;
-import src.app.model.Usuario;
-import src.lib.Debug;
+import app.conf.Configuracao;
+import app.model.Mensagem;
+import app.model.Usuario;
+import lib.Debug;
 
 public abstract class Cliente {
   private static final String CONF_PORTA = "porta";

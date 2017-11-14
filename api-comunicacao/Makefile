@@ -18,7 +18,7 @@ clear:
 	##########################
 	## DEPENDECIES
 	##########################
-	rm -r lib dist .classpath
+	rm -r lib dist .classpath api_comunicacao_*.jar
 	##########################
 	## END DEPENDENCIES
 	##########################
@@ -27,13 +27,9 @@ setup:
 	## COMPILE
 	##########################
 	mkdir -p dist
-	find ./lib -name *.jar > .classpath
-	find ./src -name *.java >> .classpath
-	# echo "${CLASSPATH}"
-	# echo @sources_list.txt
-	javac -d dist -cp @.classpath -Xmaxerrs 5
-	# mv dist/src/* dist/
-	# rm -r dist/src
+	find ./lib -name "*.jar" > .classpath
+	find ./src -name "*.java" >> .classpath
+	javac -d dist/ -cp @.classpath -Xmaxerrs 5
 	jar cf api_comunicacao_$(API_VERSION).jar dist/** conf/** lib/**
 	##########################
 	## END COMPILATION

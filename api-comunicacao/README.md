@@ -62,7 +62,7 @@ OB.: Lembre-se de atualizar a versão do projeto!
 
 ## Autores
 
-- **Daniel Prett Campagna** - *Initial work* - [PurpleBooth](https://github.com/danielpcampagna)
+- **Daniel Prett Campagna** - [PurpleBooth](https://github.com/danielpcampagna)
 
 ## Licença
 

@@ -26,8 +26,10 @@ DROP TABLE IF EXISTS `client`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `client` (
   `id` int(4) NOT NULL,
-  `type` varchar(45) NOT NULL,
   `address` varchar(45) NOT NULL,
+  `A` int(4) DEFAULT NULL,
+  `B` int(4) DEFAULT NULL,
+  `C` int(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -50,8 +52,10 @@ DROP TABLE IF EXISTS `message`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message` (
   `id` int(4) NOT NULL,
-  `type` varchar(45) NOT NULL,
   `content` varchar(45) DEFAULT NULL,
+  `A` int(4) DEFAULT NULL,
+  `B` int(4) DEFAULT NULL,
+  `C` int(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -111,4 +115,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-13 11:16:28
+-- Dump completed on 2017-11-17 11:56:32

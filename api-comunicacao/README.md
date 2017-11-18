@@ -5,7 +5,20 @@ Ela gerencia ID's de usuários com seus devidos IP de forma paralela e também p
 
 ## Usando
 
-Para usar a API de Comunicação, basta importar para o seu projeto o arquivo *.jar
+Para usar a API de Comunicação, basta importar para o seu projeto o arquivo api_comunicacao_(versão).jar
+A classe que for usar, basta fazer os seguintes _imports_:
+
+1. **APIComunicação**
+```java
+import api_comunicacao.interface.APIComunicacao;
+import api_comunicacao.interface.RespostaServidor;
+```
+
+Use essa dependência para utilizar as funcionalidades que a API se propõe a solucionar:
+
+  - **enviarMensagem**: informe o **id** do usuário e o corpo da **mensagem**.  
+  - **salvarUsuario**: informe o **id** do usuário e o **ip**. Opcionalmente, caso não deseja salvar caso já exista um usuário com o id informado, passe o terceiro parâmetro com valor **false**.  
+  - **ligarServidor**: informe o código que será executado quando o algum cliente contactar ao servidor. Esse deve ser uma instância de uma classe que implementa a interface `api_comunicacao.interface.RespostaServidor`.  
 
 ## Contribuindo
 
@@ -62,7 +75,7 @@ OB.: Lembre-se de atualizar a versão do projeto!
 
 ## Autores
 
-- **Daniel Prett Campagna** - *Initial work* - [PurpleBooth](https://github.com/danielpcampagna)
+- **Daniel Prett Campagna** - [danielpcampagna](https://github.com/danielpcampagna)
 
 ## Licença
 

@@ -27,6 +27,9 @@ public class APIComunicacao {
 		}
 	}
 
+	public void salvarUsuario(String id, String ip){
+		salvarUsuario(id, ip, true);
+	}
 	public void salvarUsuario(String id, String ip, boolean forcar){
 		try{
 			this.controle.salvarUsuario(new Usuario(id, ip), forcar);

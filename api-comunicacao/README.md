@@ -14,25 +14,28 @@ import api_comunicacao.ObjetoComunicacao;
 
 2. Para ligar o servidor, basta usar o método `ligarServidor` da classe `APIComunicacao`. Passe como parâmetro uma instância de `ObjetoComunicacao` informando os parâmetros **ip do servidor**, **porta do servidor** e **timeout** (tempo de espera).
 Além disso, implemente as funções:
-  - `sucesso`: Que será chamada quando o servidor receber uma mensagem de algum cliente. Essa função espera receber como parâmetro uma `String` enviada pelo cliente.
-  - `erro`: Que será chamada quando ocorrer algum erro. Espera receber uma exceção (`Exception`).
-  - `fimEscuta`: Que é chamada quando o servidor fica esperando por um tempo maior que o tempo definido pelo atributo `timeout` do objeto. Não recebe nenhum parâmetro.
+
+* `sucesso`: Que será chamada quando o servidor receber uma mensagem de algum cliente. Essa função espera receber como parâmetro uma `String` enviada pelo cliente.
+  
+* `erro`: Que será chamada quando ocorrer algum erro. Espera receber uma exceção (`Exception`).
+  
+* `fimEscuta`: Que é chamada quando o servidor fica esperando por um tempo maior que o tempo definido pelo atributo `timeout` do objeto. Não recebe nenhum parâmetro.
   
 
 ```java
 APIComunicacao.ligarServidor(new ObjetoComunicacao(ip, porta, 10000){
-  public void sucesso(String resultado){
-		  System.out.println("Recebida a requisição de "+this.getIpCliente());
-				System.out.println(resultado);
-				System.out.println("fim");
-		}
-		public void erro(Exception e){
-		  System.out.println("Falha:"+e.getMessage());
-		}
-		public void fimEscuta(){
-		  System.out.println("Fim da escuta.");
-		  System.out.println("Nenhuma requisição foi estabelecida.");
-		}
+	public void sucesso(String resultado){
+		System.out.println("Recebida a requisição de "+this.getIpCliente());
+		System.out.println(resultado);
+		System.out.println("fim");
+	}
+	public void erro(Exception e){
+		System.out.println("Falha:"+e.getMessage());
+	}
+	public void fimEscuta(){
+		System.out.println("Fim da escuta.");
+		System.out.println("Nenhuma requisição foi estabelecida.");
+	}
 }
 ```
 
@@ -41,18 +44,18 @@ APIComunicacao.ligarServidor(new ObjetoComunicacao(ip, porta, 10000){
   
 ```java
 APIComunicacao.enviar(new ObjetoComunicacao(ip, porta, "192.168.0.1", 5000, "Olá, sou o cliente com IP "+ip, 10000){
-  public void sucesso(String resultado){
-		  System.out.println("Requisição enviada");
-				System.out.println(resultado);
-				System.out.println("fim");
-  }
-		public void erro(Exception e){
-		  System.out.println("Falha:"+e.getMessage());
-		}
-		public void fimEscuta(){
-		  System.out.println("Fim da escuta.");
-				System.out.println("Nenhuma requisição foi estabelecida.");
-		}
+	public void sucesso(String resultado){
+		System.out.println("Requisição enviada");
+		System.out.println(resultado);
+		System.out.println("fim");
+  	}
+	public void erro(Exception e){
+		System.out.println("Falha:"+e.getMessage());
+	}
+	public void fimEscuta(){
+		System.out.println("Fim da escuta.");
+		System.out.println("Nenhuma requisição foi estabelecida.");
+	}
 });
 ```
 

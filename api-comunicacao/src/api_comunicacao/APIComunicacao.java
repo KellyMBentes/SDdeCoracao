@@ -1,67 +1,67 @@
 package api_comunicacao;
 
-import app.controller.Controle;
-import app.conf.Configuracao;
-import app.model.Usuario;
-import app.model.Mensagem;
+import java.lang.Exception;
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.Socket;
+import java.net.InetAddress;
+
+import api_comunicacao.ObjetoComunicacao;
+import lib.Debug;
+import servico.lib.FabricaCliente;
+import servico.lib.FabricaServidor;
+import servico.Cliente;
+import servico.Servidor;
+import servico.lib.ObjetoComunicacaoServidorString;
 
 public class APIComunicacao {
-	private static final String FLAG_ROOT = "--root";
-	private static final String FLAG_REPOSITORIO = "-r";
-	private Controle controle;
-	private Configuracao configuracao;
+	private static final String tipo = "";
 
-	public APIComunicacao(String args[]){
-		this.setParametrosConfiguracao(args);
-		this.configuracao = Configuracao.getInstancia();
-		this.controle = new Controle();
-	}
-
-	public void enviarMensagem(String idUsuario, String corpoMensagem){
-		try {
-			Usuario usuario = controle.buscarUsuarioPorId(idUsuario);
-			Mensagem mensagem = new Mensagem(corpoMensagem);
-			this.controle.enviarMensagem(usuario, mensagem);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void salvarUsuario(String id, String ip){
-		salvarUsuario(id, ip, true);
-	}
-	public void salvarUsuario(String id, String ip, boolean forcar){
+	public static void enviar(ObjetoComunicacao obj){
 		try{
-			this.controle.salvarUsuario(new Usuario(id, ip), forcar);
+			Cliente cliente = FabricaCliente.getCliente(tipo);
+
+			String ip = obj.getIp();
+			int porta = obj.getPorta();
+			String ipDest = obj.getIpDest();
+			int portaDest = obj.getPortaDest();
+			String dado = obj.getDado();
+			int timeout = obj.getTimeout();
+
+			cliente.enviar(ip, porta, ipDest, portaDest, dado, timeout);
+		} catch (java.io.InterruptedIOException e) {
+			obj.fimEscuta();
 		} catch (Exception e) {
-			e.printStackTrace();
+			obj.erro(e);
 		}
 	}
 
-	public void ligarServidor(RespostaServidor callback){
-		this.controle.ligarServidor(callback);
-	}
+	public static void ligarServidor(ObjetoComunicacao obj){
+		try {
+			Servidor servidor = FabricaServidor.getServidor(tipo);
 
-	private void setParametrosConfiguracao(String args[]){
-		String parametro = getParametro(args, FLAG_ROOT);
-		if(parametro != null) Configuracao.ROOT = parametro;
+			String ip = obj.getIp();
+			int porta = obj.getPorta();
+			int timeout = obj.getTimeout();
 
-		parametro = getParametro(args, FLAG_REPOSITORIO);
-		if(parametro != null) Configuracao.REPOSITORIO = parametro;
+			servidor.ligar(ip, porta, timeout, new ObjetoComunicacaoServidorString(){
+				public void sucesso(String val, Socket cliente){
+					String ip = cliente.getInetAddress().getHostAddress();
+					int porta = cliente.getPort();
 
-		for(String chave: Configuracao.getInstancia().getChaves()){
-			String chaveParametro = ("--"+chave);
-			parametro = getParametro(args, chaveParametro);
-			if(parametro != null) Configuracao.set(chave, parametro);
+					Debug.println("Servidor: ip cliente: "+ip);
+					Debug.println("Servidor: porta cliente: "+porta);
+
+					obj.setIpCliente(ip);
+					obj.setPortaCliente(porta);
+					obj.sucesso(val);
+				}
+			});
+
+		} catch (java.net.SocketTimeoutException e){
+			obj.fimEscuta();
+		} catch (Exception e){
+			obj.erro(e);
 		}
-	}
-
-	private static String getParametro(String args[], String parametro){
-		for(int i = 0; i < args.length; i++){
-			if(args[i] == parametro && i+1 < args.length){
-				return args[i+1];
-			}
-		}
-		return null;
 	}
 }

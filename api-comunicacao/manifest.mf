@@ -1,0 +1,5 @@
+Name: dist/
+Manifest-version: 1.0
+Specification-Title: "api de comunicação"
+Specification-Version: "1.0"
+Implementation-Version: "1.0"

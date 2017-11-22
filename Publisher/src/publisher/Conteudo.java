@@ -31,18 +31,21 @@ public class Conteudo {
 
     public String getConteudoA() {
         int escolheA;
-
-        escolheA = Sleeper.random_int(0, 15);
-
+        do {
+            escolheA = Sleeper.random_int(0, 15);
+        } while (!chooseA[escolheA]);
         String vet[] = {"À margem da vida", "À meia luz", "A um passo da eternidade", "Acerto Final", "Achados e Perdidos",
             "Adivinhe Quem Vem Para Roubar", "Admiradora Secreta", "Adoráveis Mulheres", "Alguém Muito Especial",
             "Alguém para Amar", "Alguém Tem Que Ceder", "Alto Risco", "Alucinação", "Alucinações do Passado", "Alvin e os Esquilos"};
+        chooseA[escolheA] = false;
         return vet[escolheA];
     }
 
     public String getConteudoB() {
         int escolheB;
-        escolheB = Sleeper.random_int(0, 15);
+        do {
+            escolheB = Sleeper.random_int(0, 15);
+        } while (!chooseB[escolheB]);
         String vet[] = {"Beleza Americana", "Beleza Roubada", "Bella Mafia", "Bellini e a Esfinge", "Bellini e o Demônio",
             "Bem-Amada", "Bem Me Quer, Mal Me Quer", "Bem-vindo à Casa de Bonecas", "Bem-vindo à Selva", "Bem-vindos ao Paraíso",
             "Ben-Hur", "Bendito Fruto", "Benjamim", "Brigada 49", "Brilhante"};
@@ -52,7 +55,9 @@ public class Conteudo {
 
     public String getConteudoC() {
         int escolheC;
-        escolheC = Sleeper.random_int(0, 15);
+        do {
+            escolheC = Sleeper.random_int(0, 15);
+        } while (!chooseC[escolheC]);
         String vet[] = {"Cenas de um Casamento", "Cenas de uma Família", "Censura Máxima", "Ciladas da Sorte", "Cinco Covas no Egito",
             "Cinco Dias Antes da Morte", "Cinco Dias de Conspiração", "Cinco Evas e um Adão", "Código de Ataque", "Código Desconhecido",
             "Código para o Inferno", "Comportamento Suspeito", "Con Air - A Rota da Fuga", "Copacabana", "Copenhagen"};

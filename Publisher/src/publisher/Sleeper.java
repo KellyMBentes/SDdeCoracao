@@ -11,7 +11,7 @@ package publisher;
 public class Sleeper {
     
     public static void sleep_thread() {
-        int num = random_int(2,3);
+        int num = random_int(2,6);
         try {
             Thread.sleep(num * 1000);
         }catch(Exception e){

@@ -26,7 +26,7 @@ public class PublisherGenerator extends Thread implements Runnable {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         ServerSocket serverSocket0 = new ServerSocket(5000);
-
+        
         PublisherGenerator p1 = new PublisherGenerator();
         PublisherGenerator p2 = new PublisherGenerator();
         Thread t = new Thread(p1);
@@ -39,7 +39,7 @@ public class PublisherGenerator extends Thread implements Runnable {
     public void run() {
         int t1;
         Conteudo c = new Conteudo();
-        /*while (c.checkAvailability(Conteudo.chooseA, Conteudo.chooseB, Conteudo.chooseC)) {
+        while (c.checkAvailability(Conteudo.chooseA, Conteudo.chooseB, Conteudo.chooseC)) {
             Publisher p1 = null;
             if(!c.checkAvailabilityOne(Conteudo.chooseA)){
                 defaultTags[0] = false;
@@ -53,10 +53,7 @@ public class PublisherGenerator extends Thread implements Runnable {
             do {
                 t1 = chooseTag();
                 
-            } while (!defaultTags[t1]);*/
-        Publisher p1 = null;
-        while (true) {
-            t1 = chooseTag();
+            } while (!defaultTags[t1]);
             defaultTags[t1] = false;
             try {
                 p1 = new Publisher("127.0.0.1", 5000, t1);
@@ -65,12 +62,14 @@ public class PublisherGenerator extends Thread implements Runnable {
                 Logger.getLogger(PublisherGenerator.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        
     }
 
     public static int chooseTag() {
         int i;
-        i = Sleeper.random_int(0, 3);
+        do {
+            i = Sleeper.random_int(0, 3);
+        } while (!defaultTags[i]);
 
         return i;
     }

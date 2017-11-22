@@ -76,18 +76,11 @@ public class Publisher implements Runnable {
         } catch (IOException ex) {
             System.out.println("deu ruim");
             Logger.getLogger(Publisher.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            try {
-                if(this.os == null) this.os.close();
-                if(this.is == null) this.is.close();
-                if(this.socket == null) this.socket.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Publisher.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
 
         PublisherGenerator.defaultTags[this.tag] = true;   
         Sleeper.sleep_thread();
+        PublisherGenerator.defaultTags[this.tag] = true;
     }
 
 }

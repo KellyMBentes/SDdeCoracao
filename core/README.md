@@ -5,4 +5,4 @@
 # O Que Falta
 
 No momento falta verificar de tempo em tempo se subscribers que estavam vivos continuam vivos.
-Também falta criar uma simulação iremos testar o funcionamento na marra quando juntar tudo.
+Também falta criar uma simulação ou teremos que testar o funcionamento na marra quando juntar tudo.

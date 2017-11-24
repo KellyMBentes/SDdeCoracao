@@ -13,24 +13,21 @@ public class TrabSD {
 		if(cs.equals(null))
 			System.exit(0);
 		
+		Thread[] bgThreads = new Thread[5]; // Background Threads holder
 		
 		//Cria 2 Threads pra escutar Publishers
-		Thread listenPub1 = new Thread(new ListenPublisher());
-		Thread listenPub2 = new Thread(new ListenPublisher());
-		listenPub1.start();
-		listenPub2.start();
+		bgThreads[0] = new Thread(new ListenPublisher());
+		bgThreads[1] = new Thread(new ListenPublisher());
 		
 		
 		//Cria Thread que escuta novos clientes
-		Thread listenSub = new Thread(new ListenSubscriber());
-		listenSub.start();
+		bgThreads[2] = new Thread(new ListenSubscriber());
 		
 		//Cria Thread que envia msgs de tempo em tempo
-		Thread bgMsgSender = new Thread(new TemporizadorEnvioMsg());
-		bgMsgSender.start();
+		bgThreads[3] = new Thread(new TemporizadorEnvioMsg());
 		
-		// Thread responsavel em manter lista de subscribers vivos
-		Thread checkIdsAlive = new Thread(){
+		// Cria Thread responsavel em manter lista de subscribers vivos
+		bgThreads[4] = new Thread(){
 			public void run(){
 				System.out.println("*****Thread: auxMain started*****");
 				
@@ -72,8 +69,12 @@ public class TrabSD {
 				}
 				System.out.println("****Thread: auxMain terminando****");
 			}
-		};checkIdsAlive.start();
+		};
 		
+		// Inicia Threads
+		for(Thread t : bgThreads){
+			t.start();
+		}
 		
 		// Para execução apertando tecla "s"
 		try (Scanner scanner = new Scanner(System.in)) {
@@ -82,25 +83,11 @@ public class TrabSD {
                 String userInput = scanner.next();
                 if("s".equals(userInput)) {
                     // Interrompe Threads executando
-                	if(listenPub1.isAlive()){
-            			listenPub1.interrupt();
-            		}
-                	
-                	if(listenPub2.isAlive()){
-            			listenPub2.interrupt();
-            		}
-                	
-                	if(listenSub.isAlive()){
-            			listenSub.interrupt();
-            		}
-                	
-                	if(bgMsgSender.isAlive()){
-            			bgMsgSender.interrupt();
-            		}
-                	
-                	if(checkIdsAlive.isAlive()){
-            			checkIdsAlive.interrupt();
-            		}
+                	for(Thread t : bgThreads){
+	                	if(t.isAlive()){
+	            			t.interrupt();
+	            		}
+                	}
                 	
                     keepWaiting = false;
                 }

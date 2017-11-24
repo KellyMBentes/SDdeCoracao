@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class ControlShared {
 	public volatile ArrayList<Client> listaClientes;
 	public volatile ArrayList<Integer> idsAtivos;
-	public volatile boolean keepRunning;
 	public final String localIP;
 	
 	private static volatile ControlShared instance;
@@ -14,7 +13,6 @@ public class ControlShared {
 	private ControlShared() throws UnknownHostException {
 		 this.listaClientes = new ArrayList<Client>();
 		 this.idsAtivos = new ArrayList<Integer>();
-		 this.keepRunning = true;
 		 this.localIP = InetAddress.getLocalHost().getHostAddress();
 	}
 

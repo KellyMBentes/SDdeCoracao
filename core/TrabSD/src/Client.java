@@ -4,14 +4,17 @@ public class Client {
     private boolean[] tags;
     private String endereco;
     
-    public Client(int id, boolean[] t, String endereco){
-        this.id = id;
-        this.tags = t;
-        this.endereco = endereco;
-    }
     
     public Client(int id, boolean a, boolean b, boolean c, String endereco){
         this.id = id;
+        this.tags[0] = a;
+        this.tags[1] = b;
+        this.tags[2] = c;
+        this.endereco = endereco;
+    }
+    
+    public Client(boolean a, boolean b, boolean c, String endereco){
+        this.id = 999; //caso seja inserido verificar id errada
         this.tags[0] = a;
         this.tags[1] = b;
         this.tags[2] = c;
@@ -30,7 +33,7 @@ public class Client {
         return this.endereco;
     }
     
-    public void setId(int id){
+    private void setId(int id){
         this.id = id;
     }
     
@@ -42,8 +45,13 @@ public class Client {
         this.endereco = end;
     }
     
-    public void saveInBD(){
-    	MySqlCon.excuteUpdate("INSERT INTO DB_MIDDLEWARE.client VALUES ("+id+","+tags[0]+","+tags[1]+","+tags[2]+","+endereco+")");
+    public void saveInBD() throws Exception{
+    	int autoId = MySqlCon.executeInsert("INSERT INTO DB_MIDDLEWARE.client (a,b,c,address) VALUES ("+tags[0]+","+tags[1]+","+tags[2]+","+endereco+")");
+    	
+    	if(autoId < 0)
+    		throw new Exception("Auto Key de ID foi retornado como "+autoId);
+    	else
+    		this.setId(autoId);
     }
     
     public void updateEnd(){

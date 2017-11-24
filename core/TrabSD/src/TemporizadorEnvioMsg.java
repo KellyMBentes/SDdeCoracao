@@ -10,7 +10,7 @@ public class TemporizadorEnvioMsg implements Runnable {
 		
 		ControlShared cs = ControlShared.getInstance();
 		
-		while(cs.keepRunning){
+		while(!Thread.interrupted()){
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {

@@ -36,63 +36,73 @@ public class TrabSD {
 				
 				ControlShared cs = ControlShared.getInstance();
 				
-				// Verifica se clientes estão vivos de tempo em tempo
-				if(!cs.idsAtivos.isEmpty()){
-					InetAddress iNet;
-					ArrayList<Integer> toRemoveList = new ArrayList<Integer>();
+				while(!Thread.interrupted()){
+					try {
+						Thread.sleep(2490);
+					} catch (InterruptedException e) {
+						System.out.println("++Thread: auxMain interrompida++");
+						return;
+					}
 					
-					for(int id : cs.idsAtivos){
-						for (Client cli : cs.listaClientes){
-							if(id == cli.getId()){
-								try {
-									iNet = InetAddress.getByName(cli.getEndereco());
-									if(!iNet.isReachable(500)){
-										toRemoveList.add(id);
+					// Verifica se clientes estão vivos de tempo em tempo
+					if(!cs.idsAtivos.isEmpty()){
+						InetAddress iNet;
+						ArrayList<Integer> toRemoveList = new ArrayList<Integer>();
+						
+						for(int id : cs.idsAtivos){
+							for (Client cli : cs.listaClientes){
+								if(id == cli.getId()){
+									try {
+										iNet = InetAddress.getByName(cli.getEndereco());
+										if(!iNet.isReachable(500)){
+											toRemoveList.add(id);
+										}
+											
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
 									}
-										
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
 								}
 							}
 						}
-					}
-					for(int ele : toRemoveList){
-						cs.idsAtivos.remove((Object)ele);
+						for(int ele : toRemoveList){
+							cs.idsAtivos.remove((Object)ele);
+						}
 					}
 				}
-				System.out.println("****Thread: Main terminando****");
+				System.out.println("****Thread: auxMain terminando****");
 			}
 		};checkIdsAlive.start();
 		
 		
 		// Para execução apertando tecla "s"
 		try (Scanner scanner = new Scanner(System.in)) {
-            while(cs.keepRunning) {
+			boolean keepWaiting = true;
+            while(keepWaiting) {
                 String userInput = scanner.next();
                 if("s".equals(userInput)) {
                     // Interrompe Threads executando
-//                	if(listenPub1.isAlive()){
-//            			listenPub1.interrupt();
-//            		}
-//                	
-//                	if(listenPub2.isAlive()){
-//            			listenPub2.interrupt();
-//            		}
-//                	
-//                	if(listenSub.isAlive()){
-//            			listenSub.interrupt();
-//            		}
-//                	
-//                	if(bgMsgSender.isAlive()){
-//            			bgMsgSender.interrupt();
-//            		}
-//                	
-//                	if(checkIdsAlive.isAlive()){
-//            			checkIdsAlive.interrupt();
-//            		}
-//                	
-                    cs.keepRunning = false;
+                	if(listenPub1.isAlive()){
+            			listenPub1.interrupt();
+            		}
+                	
+                	if(listenPub2.isAlive()){
+            			listenPub2.interrupt();
+            		}
+                	
+                	if(listenSub.isAlive()){
+            			listenSub.interrupt();
+            		}
+                	
+                	if(bgMsgSender.isAlive()){
+            			bgMsgSender.interrupt();
+            		}
+                	
+                	if(checkIdsAlive.isAlive()){
+            			checkIdsAlive.interrupt();
+            		}
+                	
+                    keepWaiting = false;
                 }
             }
         }

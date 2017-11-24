@@ -2,11 +2,33 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public final class MySqlCon {
-	private final static String USERNAME = "root";
-	private final static String PASSWORD = "admin";
+	private static final String USERNAME = "root";
+	private static final String PASSWORD = "admin";
 	
 	private MySqlCon(){
 		
+	}
+	
+	public static int executeInsert(String query){
+		int autoGenKey = -1;
+		
+		try{  
+            Class.forName("com.mysql.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/db_middleware",USERNAME,PASSWORD);  
+            //here db_middleware is database name  
+            Statement stmt=con.createStatement();  
+            stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                autoGenKey = rs.getInt(1);
+            } else {
+            	throw new Exception("Falha na recuperação de key auto gerada.");
+            }
+            con.close();
+        }catch(Exception e){ System.out.println(e);}
+		
+		return autoGenKey;
 	}
 	
 	public static void excuteUpdate(String query){

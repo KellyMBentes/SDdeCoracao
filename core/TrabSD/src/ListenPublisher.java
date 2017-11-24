@@ -9,7 +9,7 @@ public class ListenPublisher implements Runnable{
 		
 		ControlShared cs = ControlShared.getInstance();
 		
-		while(cs.keepRunning){
+		while(!Thread.interrupted()){
 			// Chama metodo da API para escutar Publisher
 			// Caso chegue uma mensagem instancia e salva a mensagem no BD
 			try {
@@ -23,29 +23,18 @@ public class ListenPublisher implements Runnable{
 					}
 	
 					@Override
-					public void erro(Exception arg0) {
-						// TODO Auto-generated method stub
+					public void erro(Exception e) {
 						System.out.println("Deu erro na thread tipo ListenPublisher: "+Thread.currentThread().getName());
+						e.printStackTrace();
 					}
 	
 					@Override
-					public void fimEscuta() {
-						// TODO Auto-generated method stub
-						
-					}
+					public void fimEscuta() {}
 				};APIComunicacao.ligarServidor(oc);
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// We've been interrupted: no more messages.
-				System.out.println("++Thread: "+Thread.currentThread().getName()+" Class: "+this.getClass().getName()+" interrompida++");
-				return;
 			}
 		}
 		

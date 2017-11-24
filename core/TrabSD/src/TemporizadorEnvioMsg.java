@@ -1,30 +1,21 @@
 import java.util.ArrayList;
+import api_comunicacao.APIComunicacao;
+import api_comunicacao.ObjetoComunicacao;
 
 public class TemporizadorEnvioMsg implements Runnable {
-//	volatile ArrayList<Integer> lista;
-//	
-//	public TemporizadorEnvioMsg(ArrayList<Integer> l) {
-//		this.lista = l;
-//	}
-	
+
 	@Override
 	public void run() {
+		System.out.println("*****Thread: "+Thread.currentThread().getName()+" Class: "+this.getClass().getName()+" started*****");
+		
 		ControlShared cs = ControlShared.getInstance();
 		
-		System.out.println("*****Thread2 started*****");
-		for(int i = 0; i <= 2; i++){
-//			System.out.println("*Lista de clientes: ");
-//			for(Cliente item: lista){
-//				System.out.println("--Cliente => " + item.toString());
-//			}
-//			System.out.println();
-			//Pausa por 5 segundos
+		while(cs.keepRunning){
 			try {
-				System.out.println("**Thread2 sleep**");
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// We've been interrupted: no more messages.
-				System.out.println("++Thread2 interrompida++");
+				System.out.println("++Thread: "+Thread.currentThread().getName()+" Class: "+this.getClass().getName()+" interrompida++");
 				return;
 			}
 			
@@ -32,20 +23,35 @@ public class TemporizadorEnvioMsg implements Runnable {
 			ArrayList<MensagemParaEnviar> listaMsgs;
 			listaMsgs = MySqlCon.getMsgsToSend();
 			
-			System.out.println("**Thread2 Enviando msgs**");
-			//Solicita API para mandar msgs se Cliente online TODO
+			//Solicita API para mandar msgs se Cliente online
 			for(MensagemParaEnviar msg : listaMsgs){
-				if(cs.idsAtivos.contains(msg.getIdClient())){					
-					System.out.println(msg.toString());
-					// TODO após enviar deve ter confimação de envio, caso positivo propagar para banco
-					//if()
-					//	MySqlCon.confirmReceived(msg.getId());
+				if(cs.idsAtivos.contains(msg.getIdClient())){
+					try {
+						ObjetoComunicacao oc = new ObjetoComunicacao(cs.localIP, 5001, msg.getClientEnd(), 4444, msg.getContent(), 500) {
+							
+							@Override
+							public void sucesso(String resultado) {
+								// Após enviar deve ter confimação de envio, caso positivo propagar para banco
+								MySqlCon.confirmReceived(msg.getId());								
+							}
+							
+							@Override
+							public void fimEscuta() {}
+							
+							@Override
+							public void erro(Exception e) {e.printStackTrace();}
+							
+						};APIComunicacao.enviar(oc);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}					
 				}
 			}			
 			
 		}
 		
-		System.out.println("****Thread2 terminando****");
+		System.out.println("****Thread: "+Thread.currentThread().getName()+" Class: "+this.getClass().getName()+" terminando****");
 	}
 
 }

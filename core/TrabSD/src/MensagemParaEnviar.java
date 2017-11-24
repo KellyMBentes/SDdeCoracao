@@ -10,7 +10,7 @@ public class MensagemParaEnviar {
 		this.setId(id);
 		this.setIdClient(idC);
 		this.setClientEnd(end);
-        this.setMensagem(msg);
+        this.setContent(msg);
         this.setReceived(rcvd);
 	}
 
@@ -27,7 +27,7 @@ public class MensagemParaEnviar {
 		return clientEnd;
 	}
 
-	public String getMensagem() {
+	public String getContent() {
 		return content;
 	}
 
@@ -48,7 +48,7 @@ public class MensagemParaEnviar {
 		this.clientEnd = clientEnd;
 	}
 
-	public void setMensagem(String mensagem) {
+	public void setContent(String mensagem) {
 		this.content = mensagem;
 	}
 

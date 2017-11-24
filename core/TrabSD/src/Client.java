@@ -51,6 +51,24 @@ public class Client {
     }
     
     @Override
+    public boolean equals(Object obj){
+    	if (obj == null) {
+            return false;
+        }
+    	
+        if (!Client.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+        
+        final Client other = (Client) obj;
+        
+        if (this.getId() != other.getId()) {
+            return false;
+        }
+        return true;
+    }
+    
+    @Override
     public String toString(){
     	return ("ID: "+this.id+", tipos : ["+this.tags[0]+", "+this.tags[1] + ", "+ this.tags[2] +"], End: "+this.endereco);
     }

@@ -1,67 +1,104 @@
-//import java.util.ArrayList;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class TrabSD {
 
 	
 	public static void main(String[] args) {
+		System.out.println("*****Thread: Main started*****");
+		
+		// Cria Singleton do controle de variaveis compartilhadas
 		ControlShared cs = ControlShared.getInstance();
 		if(cs.equals(null))
 			System.exit(0);
 		
 		
 		//Cria 2 Threads pra escutar Publishers
-//		Thread listenPub1 = new Thread(new ListenPublisher());
-//		Thread listenPub2 = new Thread(new ListenPublisher());
-//		listenPub1.start();
-//		listenPub2.start();
+		Thread listenPub1 = new Thread(new ListenPublisher());
+		Thread listenPub2 = new Thread(new ListenPublisher());
+		listenPub1.start();
+		listenPub2.start();
 		
 		
 		//Cria Thread que escuta novos clientes
-//		Thread listenSub = new Thread(new ListenSubscriber());
-//		listenSub.start();
+		Thread listenSub = new Thread(new ListenSubscriber());
+		listenSub.start();
 		
 		//Cria Thread que envia msgs de tempo em tempo
-//		Thread bgMsgSender = new Thread(new TemporizadorEnvioMsg());
-//		bgMsgSender.start();
+		Thread bgMsgSender = new Thread(new TemporizadorEnvioMsg());
+		bgMsgSender.start();
 		
-		//Thread principal fica responsavel em manter lista de subscribers vivos
-		// TODO verifica se clientes estão vivos de tempo em tempo
-//		if(cs.idsAtivos.size() > 0){
-//			for()
-//		}
+		// Thread responsavel em manter lista de subscribers vivos
+		Thread checkIdsAlive = new Thread(){
+			public void run(){
+				System.out.println("*****Thread: auxMain started*****");
+				
+				ControlShared cs = ControlShared.getInstance();
+				
+				// Verifica se clientes estão vivos de tempo em tempo
+				if(!cs.idsAtivos.isEmpty()){
+					InetAddress iNet;
+					ArrayList<Integer> toRemoveList = new ArrayList<Integer>();
+					
+					for(int id : cs.idsAtivos){
+						for (Client cli : cs.listaClientes){
+							if(id == cli.getId()){
+								try {
+									iNet = InetAddress.getByName(cli.getEndereco());
+									if(!iNet.isReachable(500)){
+										toRemoveList.add(id);
+									}
+										
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+					for(int ele : toRemoveList){
+						cs.idsAtivos.remove((Object)ele);
+					}
+				}
+				System.out.println("****Thread: Main terminando****");
+			}
+		};checkIdsAlive.start();
 		
-		simulacao1(cs);
+		
+		// Para execução apertando tecla "s"
+		try (Scanner scanner = new Scanner(System.in)) {
+            while(cs.keepRunning) {
+                String userInput = scanner.next();
+                if("s".equals(userInput)) {
+                    // Interrompe Threads executando
+//                	if(listenPub1.isAlive()){
+//            			listenPub1.interrupt();
+//            		}
+//                	
+//                	if(listenPub2.isAlive()){
+//            			listenPub2.interrupt();
+//            		}
+//                	
+//                	if(listenSub.isAlive()){
+//            			listenSub.interrupt();
+//            		}
+//                	
+//                	if(bgMsgSender.isAlive()){
+//            			bgMsgSender.interrupt();
+//            		}
+//                	
+//                	if(checkIdsAlive.isAlive()){
+//            			checkIdsAlive.interrupt();
+//            		}
+//                	
+                    cs.keepRunning = false;
+                }
+            }
+        }
+		
+		System.out.println("****Thread: Main terminando****");
 	
 	}
 	
-	private static void simulacao1(ControlShared cs){
-		System.out.println("*****Main started*****");
-		
-		boolean[] bool1 = {true, false, false};
-		boolean[] bool2 = {false, false, true};
-		cs.listaClientes.add(new Client(1, bool1, "End 1"));
-		cs.listaClientes.add(new Client(2, bool1, "End 2"));
-		cs.listaClientes.add(new Client(3, bool2, "End 3"));
-		
-		for(Client c: cs.listaClientes){
-			cs.idsAtivos.add(c.getId());
-		}
-		
-		Thread bgThread = new Thread(new TemporizadorEnvioMsg());
-		bgThread.start();
-		
-		try {
-			System.out.println("**Main sleep**");
-			Thread.sleep(20000);
-		} catch (InterruptedException e) {
-			return;
-		}
-		
-		//interrompe background thread
-		if(bgThread.isAlive()){
-			bgThread.interrupt();
-		}
-		System.out.println("****Main terminando****");
-	}
-
 }

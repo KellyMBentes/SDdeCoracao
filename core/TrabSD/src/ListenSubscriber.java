@@ -34,7 +34,7 @@ public class ListenSubscriber implements Runnable{
 						Client subscriber = null;
 						
 						// Se novo instancia e salva o cliente no BD add na listaClientes de ControlShared e nos idsAtivos
-						if(resultado.length() == 3){ // Se novo String é "a,b,c"			
+						if(resultado.length() == 3){ // Se novo String e "a,b,c"
 							String[] msgSplitted = resultado.split(",");
 							subscriber = new Client((Integer.parseInt(msgSplitted[0])!=0), (Integer.parseInt(msgSplitted[1])!=0), (Integer.parseInt(msgSplitted[2])!=0), this.getIpCliente());				
 							

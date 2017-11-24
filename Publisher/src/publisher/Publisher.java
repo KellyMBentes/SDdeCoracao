@@ -8,6 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static publisher.PublisherGenerator.defaultTags;
 
+import publisher.Conteudo;
+import publisher.Sleeper;
+
 public class Publisher implements Runnable {
 
     Socket socket;

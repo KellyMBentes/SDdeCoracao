@@ -16,17 +16,24 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import publisher.Conteudo;
+import publisher.Publisher;
+import publisher.Sleeper;
+
 /**
  *
  * @author jc-am
  */
 public class PublisherGenerator extends Thread implements Runnable {
 
+    private static final String FORMATO_PARAMETRO = "-{:nome:}";
     static boolean defaultTags[] = {true, true, true};
+    private static String ip = null;
 
     public static void main(String[] args) throws InterruptedException, IOException {
         ServerSocket serverSocket0 = new ServerSocket(5000);
-        
+        PublisherGenerator.ip = PublisherGenerator.getParametro("ip", args);
+
         PublisherGenerator p1 = new PublisherGenerator();
         PublisherGenerator p2 = new PublisherGenerator();
         Thread t = new Thread(p1);
@@ -56,7 +63,7 @@ public class PublisherGenerator extends Thread implements Runnable {
             } while (!defaultTags[t1]);
             defaultTags[t1] = false;
             try {
-                p1 = new Publisher("127.0.0.1", 5000, t1);
+                p1 = new Publisher(PublisherGenerator.ip, 5000, t1);
                 p1.run();
             } catch (IOException ex) {
                 Logger.getLogger(PublisherGenerator.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,5 +79,16 @@ public class PublisherGenerator extends Thread implements Runnable {
         } while (!defaultTags[i]);
 
         return i;
+    }
+
+    private static String getParametro(String nomeParametro, String args[]){
+        String resultado = null;
+        String nomeParametroFormatado = FORMATO_PARAMETRO.replace("{:nome:}",nomeParametro);
+        for (int i = 0; i < args.length; i++){
+            if(args[i].equals(nomeParametroFormatado) && i+1 < args.length){
+                resultado = args[i+1];
+            }
+        }
+        return resultado;
     }
 }

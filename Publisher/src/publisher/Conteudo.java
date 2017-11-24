@@ -5,6 +5,8 @@
  */
 package publisher;
 
+import publisher.Sleeper;
+
 /**
  *
  * @author Felipe

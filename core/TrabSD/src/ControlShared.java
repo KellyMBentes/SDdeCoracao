@@ -1,11 +1,13 @@
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.lang.IllegalArgumentException;
+
 
 public class ControlShared {
 	public volatile ArrayList<Client> listaClientes;
 	public volatile ArrayList<Integer> idsAtivos;
-	public final String localIP;
+	public String localIP;
 	
 	private static volatile ControlShared instance;
 	private static Object mutex = new Object();
@@ -33,6 +35,13 @@ public class ControlShared {
 			}
 		}
 		return result;
+	}
+
+	public void setLocalIp(String val) throws IllegalArgumentException{
+		if(val == null || val.trim().equals("")){
+			new IllegalArgumentException("valor de ip inválido.");
+		}
+		this.localIP = val;
 	}
 	
 }

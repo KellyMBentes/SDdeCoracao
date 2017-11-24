@@ -30,7 +30,8 @@ public class ListenPublisher implements Runnable{
 	
 					@Override
 					public void fimEscuta() {}
-				};APIComunicacao.ligarServidor(oc);
+				};
+				APIComunicacao.ligarServidor(oc);
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

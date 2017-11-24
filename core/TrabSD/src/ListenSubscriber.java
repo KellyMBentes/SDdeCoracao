@@ -60,7 +60,7 @@ public class ListenSubscriber implements Runnable{
 								e.printStackTrace();
 							}
 						}
-						else{// Se já conhecido string é somente "id"
+						else{// Se ja conhecido string e somente "id"
 							for (Client cli : cs.listaClientes){
 								if(Integer.parseInt(resultado) == cli.getId())
 									subscriber = cli;

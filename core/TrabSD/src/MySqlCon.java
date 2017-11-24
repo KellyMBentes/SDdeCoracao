@@ -23,7 +23,7 @@ public final class MySqlCon {
             if (rs.next()) {
                 autoGenKey = rs.getInt(1);
             } else {
-            	throw new Exception("Falha na recuperação de key auto gerada.");
+            	throw new Exception("Falha na recuperacao de key auto gerada.");
             }
             con.close();
         }catch(Exception e){ System.out.println(e);}

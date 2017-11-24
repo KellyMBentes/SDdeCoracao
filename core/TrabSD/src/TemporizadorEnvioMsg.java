@@ -31,7 +31,7 @@ public class TemporizadorEnvioMsg implements Runnable {
 							
 							@Override
 							public void sucesso(String resultado) {
-								// Após enviar deve ter confimação de envio, caso positivo propagar para banco
+								// Apos enviar deve ter confimacao de envio, caso positivo propagar para banco
 								MySqlCon.confirmReceived(msg.getId());								
 							}
 							

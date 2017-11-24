@@ -2,17 +2,23 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import lib.Debug;
+
 public class TrabSD {
 
-	
+	private static final String FORMATO_PARAMETRO = "-{:nome:}";
+
 	public static void main(String[] args) {
+		ControlShared.getInstance().setLocalIp(getParametro("ipLocal", args));
+		//Debug.DEBUG = getParametro("debug", args).trim().equals("true");
+
 		System.out.println("*****Thread: Main started*****");
 		
 		// Cria Singleton do controle de variaveis compartilhadas
 		ControlShared cs = ControlShared.getInstance();
 		if(cs.equals(null))
 			System.exit(0);
-		
+
 		Thread[] bgThreads = new Thread[5]; // Background Threads holder
 		
 		//Cria 2 Threads pra escutar Publishers
@@ -41,7 +47,7 @@ public class TrabSD {
 						return;
 					}
 					
-					// Verifica se clientes estão vivos de tempo em tempo
+					// Verifica se clientes estao vivos de tempo em tempo
 					if(!cs.idsAtivos.isEmpty()){
 						InetAddress iNet;
 						ArrayList<Integer> toRemoveList = new ArrayList<Integer>();
@@ -76,7 +82,7 @@ public class TrabSD {
 			t.start();
 		}
 		
-		// Para execução apertando tecla "s"
+		// Para execucao apertando tecla "s"
 		try (Scanner scanner = new Scanner(System.in)) {
 			boolean keepWaiting = true;
             while(keepWaiting) {
@@ -97,5 +103,16 @@ public class TrabSD {
 		System.out.println("****Thread: Main terminando****");
 	
 	}
+
+	private static String getParametro(String nomeParametro, String args[]){
+        String resultado = null;
+        String nomeParametroFormatado = FORMATO_PARAMETRO.replace("{:nome:}",nomeParametro);
+        for (int i = 0; i < args.length; i++){
+            if(args[i].equals(nomeParametroFormatado) && i+1 < args.length){
+                resultado = args[i+1];
+            }
+        }
+        return resultado;
+    }
 	
 }

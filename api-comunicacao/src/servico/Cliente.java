@@ -12,14 +12,28 @@ import lib.Debug;
 public abstract class Cliente {
   public void enviar(String ip, int porta, String ipDest, int portaDest, String mensagem, int timeout)
    throws InterruptedIOException, IOException, Exception {
-    Debug.println("Cliente: iniciando");
-    Debug.println("Cliente: tentando conectar à "+ipDest+" na porta: "+portaDest);
-    Socket cliente = new Socket(InetAddress.getByName(ipDest), portaDest, InetAddress.getByName(ip), porta);
-    cliente.setSoTimeout(timeout);
-    Debug.println("Cliente: enviando");
-    escrever(cliente, mensagem);
-    Debug.println("Cliente: fechando");
-    cliente.close();
+    Socket cliente  = null;
+    try {
+      Debug.println("Cliente: iniciando");
+      Debug.println("Cliente: tentando conectar ao "+ipDest+" na porta: "+portaDest);
+      
+      cliente = new Socket(InetAddress.getByName(ipDest), portaDest);
+      cliente.setSoTimeout(timeout);
+
+      if(!cliente.isBound()){
+        Debug.println("Cliente: binding");
+        cliente.bind(new InetSocketAddress(ip, porta));
+      }
+      
+      Debug.println("Cliente: enviando");
+      escrever(cliente, mensagem);
+    } finally {
+      if(cliente != null){
+        Debug.println("Cliente: fechando");
+        cliente.close();
+        try { Thread.sleep(500); } catch (InterruptedException ex) {}
+      }
+    }
   }
 
   public void escrever(Socket cliente, String mensagem) throws IOException{

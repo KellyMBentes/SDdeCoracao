@@ -10,7 +10,7 @@ public class TrabSD {
 
 	public static void main(String[] args) {
 		ControlShared.getInstance().setLocalIp(getParametro("ipLocal", args));
-		//Debug.DEBUG = getParametro("debug", args).trim().equals("true");
+		Debug.DEBUG = getParametro("debug", args).trim().equals("true");
 
 		System.out.println("*****Thread: Main started*****");
 		

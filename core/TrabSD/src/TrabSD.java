@@ -19,21 +19,20 @@ public class TrabSD {
 		if(cs.equals(null))
 			System.exit(0);
 
-		Thread[] bgThreads = new Thread[5]; // Background Threads holder
+		Thread[] bgThreads = new Thread[4]; // Background Threads holder
 		
 		//Cria 2 Threads pra escutar Publishers
 		bgThreads[0] = new Thread(new ListenPublisher());
-		bgThreads[1] = new Thread(new ListenPublisher());
 		
 		
 		//Cria Thread que escuta novos clientes
-		bgThreads[2] = new Thread(new ListenSubscriber());
+		bgThreads[1] = new Thread(new ListenSubscriber());
 		
 		//Cria Thread que envia msgs de tempo em tempo
-		bgThreads[3] = new Thread(new TemporizadorEnvioMsg());
+		bgThreads[2] = new Thread(new TemporizadorEnvioMsg());
 		
 		// Cria Thread responsavel em manter lista de subscribers vivos
-		bgThreads[4] = new Thread(){
+		bgThreads[3] = new Thread(){
 			public void run(){
 				System.out.println("*****Thread: auxMain started*****");
 				

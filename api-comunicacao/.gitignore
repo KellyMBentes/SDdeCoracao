@@ -2,4 +2,3 @@ lib/
 dist/
 .classpath
 conf/conf.json
-*.jar

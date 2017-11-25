@@ -1,5 +1,0 @@
-{
-	"debug": "false",
-	"repositorio_usuario_csv": "data/usuarios.csv",
-	"estrutura_comunicacao_socket": "xml"
-}

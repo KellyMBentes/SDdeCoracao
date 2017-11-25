@@ -25,13 +25,13 @@ DROP TABLE IF EXISTS `client`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `client` (
-  `id` int(4) NOT NULL,
+  `id` int(4) NOT NULL AUTO_INCREMENT,
   `address` varchar(45) NOT NULL,
-  `A` int(4) DEFAULT NULL,
-  `B` int(4) DEFAULT NULL,
-  `C` int(4) DEFAULT NULL,
+  `tag_A` int(4) DEFAULT '0',
+  `tag_B` int(4) DEFAULT '0',
+  `tag_C` int(4) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,97 @@ LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `db_middleware`.`client_AFTER_INSERT` AFTER INSERT ON `client` FOR EACH ROW
+BEGIN
+if (NEW.tag_A = 1 and NEW.tag_B = 0 and NEW.tag_C = 0) then
+	if exists (select id from message where tag_A = new.tag_A and 
+    not exists (select * from message_client, message 
+    where message_client.id_client = new.id and 
+    message_client.id_message = message.id)) then 
+		insert into message_client (id_client, id_message, received) 
+        select new.id, id, 0 from message where tag_A = new.tag_A;
+	end if;
+end if;
+
+if (NEW.tag_B = 1 and NEW.tag_A = 0 and NEW.tag_C = 0) then
+    if exists (select id from message where tag_B = new.tag_B and 
+    not exists (select * from message_client, message 
+    where message_client.id_client = new.id and 
+    message_client.id_message = message.id)) then 
+		insert into message_client (id_client, id_message, received) 
+        select new.id, id, 0 from message where tag_B = new.tag_B;
+	end if;
+end if;
+
+if (NEW.tag_C = 1 and NEW.tag_A = 0 and NEW.tag_B = 0) then
+    if exists (select id from message where tag_C = new.tag_C and 
+    not exists (select * from message_client, message 
+    where message_client.id_client = new.id and 
+    message_client.id_message = message.id)) then 
+		insert into message_client (id_client, id_message, received) 
+        select new.id, id, 0 from message where tag_C = new.tag_C;
+	end if;
+end if;
+
+if (NEW.tag_A = 1 and NEW.tag_B = 1 and NEW.tag_C = 0) then
+    if exists (select id from message where tag_A = new.tag_A and
+    tag_B = new.tag_B and not exists (select * from message_client, message 
+    where message_client.id_client = message.id and 
+    message_client.id_message = new.id)) then
+        insert into message_client (id_client, id_message, received) 
+        select new.id, id, 0 from client 
+        where tag_A = new.tag_A and tag_B = new.tag_B;
+    end if;
+end if;
+
+if (NEW.tag_A = 1 and NEW.tag_C = 1 and NEW.tag_B = 0) then
+    if exists (select id from message where tag_A = new.tag_A and
+    tag_C = new.tag_C and not exists (select * from message_client, message 
+    where message_client.id_client = message.id and 
+    message_client.id_message = new.id)) then
+        insert into message_client (id_client, id_message, received) 
+        select new.id, id, 0 from client 
+        where tag_A = new.tag_A and tag_C = new.tag_C;
+    end if;
+end if;
+
+if (NEW.tag_B = 1 and NEW.tag_C = 1 and NEW.tag_A = 0) then
+    if exists (select id from message where tag_B = new.tag_B and
+    tag_C = new.tag_C and not exists (select * from message_client, message 
+    where message_client.id_client = message.id and 
+    message_client.id_message = new.id)) then
+        insert into message_client (id_client, id_message, received) 
+        select new.id, id, 0 from client 
+        where tag_B = new.tag_B and tag_C = new.tag_C;
+    end if;
+end if;
+
+if (NEW.tag_A = 1 and NEW.tag_B = 1 and NEW.tag_B = 1) then
+    if exists (select id from message where tag_A = new.tag_A and
+    tag_B = new.tag_B and tag_C = new.tag_C and 
+    not exists (select * from message_client, message 
+    where message_client.id_client = message.id and 
+    message_client.id_message = new.id)) then
+        insert into message_client (id_client, id_message, received) 
+        select new.id, id, 0 from client 
+        where tag_A = new.tag_A and tag_B = new.tag_B and tag_C = new.tag_C;
+    end if;
+end if;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `message`
@@ -51,13 +142,13 @@ DROP TABLE IF EXISTS `message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message` (
-  `id` int(4) NOT NULL,
-  `content` varchar(45) DEFAULT NULL,
-  `A` int(4) DEFAULT NULL,
-  `B` int(4) DEFAULT NULL,
-  `C` int(4) DEFAULT NULL,
+  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `content` varchar(45) DEFAULT '',
+  `tag_A` int(4) DEFAULT '0',
+  `tag_B` int(4) DEFAULT '0',
+  `tag_C` int(4) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,34 +159,133 @@ LOCK TABLES `message` WRITE;
 /*!40000 ALTER TABLE `message` DISABLE KEYS */;
 /*!40000 ALTER TABLE `message` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `db_middleware`.`message_AFTER_INSERT` AFTER INSERT ON `message` FOR EACH ROW
+BEGIN
+if (NEW.tag_A = 1 and NEW.tag_B = 0 and NEW.tag_C = 0) then
+    #if not exists (select id_client, id_message from message_client where id_client = client.id and id_message = NEW.id) then
+    if exists (select id from client where tag_A = new.tag_A and 
+    not exists (select * from message_client, client 
+    where message_client.id_client = client.id and 
+    message_client.id_message = new.id)) then 
+        #if not exists (select id, new.id, 0 from client where tag_A = new.tag_A) then
+        insert into message_client (id_client, id_message, received) 
+        select id, new.id, 0 from client where tag_A = new.tag_A;
+        #end if;
+    end if;
+end if;
+
+if (NEW.tag_B = 1 and NEW.tag_A = 0 and NEW.tag_C = 0) then
+    #if not exists (select id_client, id_message from message_client where id_client = id and id_message = NEW.id) then
+    if exists (select id from client where tag_B = new.tag_B and 
+    not exists (select * from message_client, client 
+    where message_client.id_client = client.id and 
+    message_client.id_message = new.id)) then 
+        #if not exists (select id, new.id, 0 from client where tag_B = new.tag_B) then
+        insert into message_client (id_client, id_message, received) 
+        select id, new.id, 0 from client where tag_B = new.tag_B;
+        #end if;
+    end if;
+end if;
+
+if (NEW.tag_C = 1 and NEW.tag_A = 0 and NEW.tag_B = 0) then
+    if exists (select id from client where tag_C = new.tag_C and 
+    not exists (select * from message_client, client 
+    where message_client.id_client = client.id and 
+    message_client.id_message = new.id)) then
+        insert into message_client (id_client, id_message, received) 
+        select id, new.id, 0 from client where tag_C = new.tag_C;
+        #end if;
+    end if;
+end if;
+
+if (NEW.tag_A = 1 and NEW.tag_B = 1 and NEW.tag_C = 0) then
+    if exists (select id from client where tag_A = new.tag_A and
+    tag_B = new.tag_B and not exists (select * from message_client, client 
+    where message_client.id_client = client.id and 
+    message_client.id_message = new.id)) then
+        insert into message_client (id_client, id_message, received) 
+        select id, new.id, 0 from client 
+        where tag_A = new.tag_A and tag_B = new.tag_B;
+    end if;
+end if;
+
+if (NEW.tag_A = 1 and NEW.tag_C = 1 and NEW.tag_B = 0) then
+    if exists (select id from client where tag_A = new.tag_A and
+    tag_C = new.tag_C and not exists (select * from message_client, client 
+    where message_client.id_client = client.id and 
+    message_client.id_message = new.id)) then
+        insert into message_client (id_client, id_message, received) 
+        select id, new.id, 0 from client 
+        where tag_A = new.tag_A and tag_C = new.tag_C;
+    end if;
+end if;
+
+if (NEW.tag_B = 1 and NEW.tag_C = 1 and NEW.tag_A = 0) then
+    if exists (select id from client where tag_B = new.tag_B and
+    tag_C = new.tag_C and not exists (select * from message_client, client 
+    where message_client.id_client = client.id and 
+    message_client.id_message = new.id)) then
+        insert into message_client (id_client, id_message, received) 
+        select id, new.id, 0 from client 
+        where tag_B = new.tag_B and tag_C = new.tag_C;
+    end if;
+end if;
+
+if (NEW.tag_A = 1 and NEW.tag_B = 1 and NEW.tag_B = 1) then
+    if exists (select id from client where tag_A = new.tag_A and
+    tag_B = new.tag_B and tag_C = new.tag_C and 
+    not exists (select * from message_client, client 
+    where message_client.id_client = client.id and 
+    message_client.id_message = new.id)) then
+        insert into message_client (id_client, id_message, received) 
+        select id, new.id, 0 from client 
+        where tag_A = new.tag_A and tag_B = new.tag_B and tag_C = new.tag_C;
+    end if;
+end if;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
--- Table structure for table `message-client`
+-- Table structure for table `message_client`
 --
 
-DROP TABLE IF EXISTS `message-client`;
+DROP TABLE IF EXISTS `message_client`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `message-client` (
-  `id` int(4) NOT NULL,
+CREATE TABLE `message_client` (
+  `id` int(4) NOT NULL AUTO_INCREMENT,
   `id_client` int(4) NOT NULL,
   `id_message` int(4) NOT NULL,
   `received` int(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `fk_message-client_1_idx` (`id_client`),
+  UNIQUE KEY `uq_message_client` (`id_client`,`id_message`),
+  KEY `fk_client_idx` (`id_client`),
   KEY `fk_message_idx` (`id_message`),
-  CONSTRAINT `fk_client` FOREIGN KEY (`id_client`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_message` FOREIGN KEY (`id_message`) REFERENCES `message` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `fk_client` FOREIGN KEY (`id_client`) REFERENCES `client` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_message` FOREIGN KEY (`id_message`) REFERENCES `message` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `message-client`
+-- Dumping data for table `message_client`
 --
 
-LOCK TABLES `message-client` WRITE;
-/*!40000 ALTER TABLE `message-client` DISABLE KEYS */;
-/*!40000 ALTER TABLE `message-client` ENABLE KEYS */;
+LOCK TABLES `message_client` WRITE;
+/*!40000 ALTER TABLE `message_client` DISABLE KEYS */;
+/*!40000 ALTER TABLE `message_client` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -115,4 +305,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-17 11:56:32
+-- Dump completed on 2017-11-25 16:44:44

@@ -7,4 +7,4 @@ compilar:
 	javac -d dist/ -cp @.classpath
 
 iniciar:
-	java -cp .:lib:dist TrabSD -ipLocal 192.168.122.10 -debug true
+	java -cp .:lib/api_comunicacao_1.0.0.jar:dist TrabSD -ipLocal 192.168.122.10 -debug true

@@ -53,7 +53,7 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `db_middleware`.`client_AFTER_INSERT` AFTER INSERT ON `client` FOR EACH ROW
 BEGIN
-if (NEW.tag_A = 1 and NEW.tag_B = 0 and NEW.tag_C = 0) then
+if (NEW.tag_A = 1) then
 	if exists (select id from message where tag_A = new.tag_A and 
     not exists (select * from message_client, message 
     where message_client.id_client = new.id and 
@@ -63,7 +63,7 @@ if (NEW.tag_A = 1 and NEW.tag_B = 0 and NEW.tag_C = 0) then
 	end if;
 end if;
 
-if (NEW.tag_B = 1 and NEW.tag_A = 0 and NEW.tag_C = 0) then
+if (NEW.tag_B = 1) then
     if exists (select id from message where tag_B = new.tag_B and 
     not exists (select * from message_client, message 
     where message_client.id_client = new.id and 
@@ -73,7 +73,7 @@ if (NEW.tag_B = 1 and NEW.tag_A = 0 and NEW.tag_C = 0) then
 	end if;
 end if;
 
-if (NEW.tag_C = 1 and NEW.tag_A = 0 and NEW.tag_B = 0) then
+if (NEW.tag_C = 1) then
     if exists (select id from message where tag_C = new.tag_C and 
     not exists (select * from message_client, message 
     where message_client.id_client = new.id and 
@@ -81,51 +81,6 @@ if (NEW.tag_C = 1 and NEW.tag_A = 0 and NEW.tag_B = 0) then
 		insert into message_client (id_client, id_message, received) 
         select new.id, id, 0 from message where tag_C = new.tag_C;
 	end if;
-end if;
-
-if (NEW.tag_A = 1 and NEW.tag_B = 1 and NEW.tag_C = 0) then
-    if exists (select id from message where tag_A = new.tag_A and
-    tag_B = new.tag_B and not exists (select * from message_client, message 
-    where message_client.id_client = message.id and 
-    message_client.id_message = new.id)) then
-        insert into message_client (id_client, id_message, received) 
-        select new.id, id, 0 from client 
-        where tag_A = new.tag_A and tag_B = new.tag_B;
-    end if;
-end if;
-
-if (NEW.tag_A = 1 and NEW.tag_C = 1 and NEW.tag_B = 0) then
-    if exists (select id from message where tag_A = new.tag_A and
-    tag_C = new.tag_C and not exists (select * from message_client, message 
-    where message_client.id_client = message.id and 
-    message_client.id_message = new.id)) then
-        insert into message_client (id_client, id_message, received) 
-        select new.id, id, 0 from client 
-        where tag_A = new.tag_A and tag_C = new.tag_C;
-    end if;
-end if;
-
-if (NEW.tag_B = 1 and NEW.tag_C = 1 and NEW.tag_A = 0) then
-    if exists (select id from message where tag_B = new.tag_B and
-    tag_C = new.tag_C and not exists (select * from message_client, message 
-    where message_client.id_client = message.id and 
-    message_client.id_message = new.id)) then
-        insert into message_client (id_client, id_message, received) 
-        select new.id, id, 0 from client 
-        where tag_B = new.tag_B and tag_C = new.tag_C;
-    end if;
-end if;
-
-if (NEW.tag_A = 1 and NEW.tag_B = 1 and NEW.tag_B = 1) then
-    if exists (select id from message where tag_A = new.tag_A and
-    tag_B = new.tag_B and tag_C = new.tag_C and 
-    not exists (select * from message_client, message 
-    where message_client.id_client = message.id and 
-    message_client.id_message = new.id)) then
-        insert into message_client (id_client, id_message, received) 
-        select new.id, id, 0 from client 
-        where tag_A = new.tag_A and tag_B = new.tag_B and tag_C = new.tag_C;
-    end if;
 end if;
 END */;;
 DELIMITER ;
@@ -170,86 +125,34 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `db_middleware`.`message_AFTER_INSERT` AFTER INSERT ON `message` FOR EACH ROW
 BEGIN
-if (NEW.tag_A = 1 and NEW.tag_B = 0 and NEW.tag_C = 0) then
-    #if not exists (select id_client, id_message from message_client where id_client = client.id and id_message = NEW.id) then
-    if exists (select id from client where tag_A = new.tag_A and 
+if (NEW.tag_A = 1) then
+	if exists (select id from client where tag_A = new.tag_A and 
     not exists (select * from message_client, client 
     where message_client.id_client = client.id and 
     message_client.id_message = new.id)) then 
-        #if not exists (select id, new.id, 0 from client where tag_A = new.tag_A) then
-        insert into message_client (id_client, id_message, received) 
+		insert into message_client (id_client, id_message, received) 
         select id, new.id, 0 from client where tag_A = new.tag_A;
-        #end if;
-    end if;
+	end if;
 end if;
 
-if (NEW.tag_B = 1 and NEW.tag_A = 0 and NEW.tag_C = 0) then
-    #if not exists (select id_client, id_message from message_client where id_client = id and id_message = NEW.id) then
-    if exists (select id from client where tag_B = new.tag_B and 
+if (NEW.tag_B = 1) then
+	if exists (select id from client where tag_B = new.tag_B and 
     not exists (select * from message_client, client 
     where message_client.id_client = client.id and 
     message_client.id_message = new.id)) then 
-        #if not exists (select id, new.id, 0 from client where tag_B = new.tag_B) then
-        insert into message_client (id_client, id_message, received) 
+		insert into message_client (id_client, id_message, received) 
         select id, new.id, 0 from client where tag_B = new.tag_B;
-        #end if;
-    end if;
+	end if;
 end if;
 
-if (NEW.tag_C = 1 and NEW.tag_A = 0 and NEW.tag_B = 0) then
+if (NEW.tag_C = 1) then
     if exists (select id from client where tag_C = new.tag_C and 
     not exists (select * from message_client, client 
     where message_client.id_client = client.id and 
     message_client.id_message = new.id)) then
         insert into message_client (id_client, id_message, received) 
         select id, new.id, 0 from client where tag_C = new.tag_C;
-        #end if;
-    end if;
-end if;
-
-if (NEW.tag_A = 1 and NEW.tag_B = 1 and NEW.tag_C = 0) then
-    if exists (select id from client where tag_A = new.tag_A and
-    tag_B = new.tag_B and not exists (select * from message_client, client 
-    where message_client.id_client = client.id and 
-    message_client.id_message = new.id)) then
-        insert into message_client (id_client, id_message, received) 
-        select id, new.id, 0 from client 
-        where tag_A = new.tag_A and tag_B = new.tag_B;
-    end if;
-end if;
-
-if (NEW.tag_A = 1 and NEW.tag_C = 1 and NEW.tag_B = 0) then
-    if exists (select id from client where tag_A = new.tag_A and
-    tag_C = new.tag_C and not exists (select * from message_client, client 
-    where message_client.id_client = client.id and 
-    message_client.id_message = new.id)) then
-        insert into message_client (id_client, id_message, received) 
-        select id, new.id, 0 from client 
-        where tag_A = new.tag_A and tag_C = new.tag_C;
-    end if;
-end if;
-
-if (NEW.tag_B = 1 and NEW.tag_C = 1 and NEW.tag_A = 0) then
-    if exists (select id from client where tag_B = new.tag_B and
-    tag_C = new.tag_C and not exists (select * from message_client, client 
-    where message_client.id_client = client.id and 
-    message_client.id_message = new.id)) then
-        insert into message_client (id_client, id_message, received) 
-        select id, new.id, 0 from client 
-        where tag_B = new.tag_B and tag_C = new.tag_C;
-    end if;
-end if;
-
-if (NEW.tag_A = 1 and NEW.tag_B = 1 and NEW.tag_B = 1) then
-    if exists (select id from client where tag_A = new.tag_A and
-    tag_B = new.tag_B and tag_C = new.tag_C and 
-    not exists (select * from message_client, client 
-    where message_client.id_client = client.id and 
-    message_client.id_message = new.id)) then
-        insert into message_client (id_client, id_message, received) 
-        select id, new.id, 0 from client 
-        where tag_A = new.tag_A and tag_B = new.tag_B and tag_C = new.tag_C;
-    end if;
+	end if;
 end if;
 END */;;
 DELIMITER ;
@@ -305,4 +208,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-25 16:44:44
+-- Dump completed on 2017-11-25 22:40:37

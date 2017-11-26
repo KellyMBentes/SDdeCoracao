@@ -31,15 +31,14 @@ public class PublisherGenerator extends Thread implements Runnable {
     private static String ip = null;
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        //ServerSocket serverSocket0 = new ServerSocket(5000);
         PublisherGenerator.ip = PublisherGenerator.getParametro("ip", args);
 
         PublisherGenerator p1 = new PublisherGenerator();
         PublisherGenerator p2 = new PublisherGenerator();
         Thread t = new Thread(p1);
-        Thread u = new Thread(p2);
+        //Thread u = new Thread(p2);
         t.start();
-        u.start();
+        //u.start();
     }
 
     @Override

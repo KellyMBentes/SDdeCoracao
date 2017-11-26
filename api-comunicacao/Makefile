@@ -12,17 +12,19 @@ limpar:
 compilar:
 	mkdir -p lib
 	mkdir -p dist
+	mkdir -p jars
 	find ./lib -name "*.jar" > .classpath
 	find ./src -name "*.java" >> .classpath
 	javac -d dist/ -cp @.classpath
 	jar cfm $(NOME_PACOTE) manifest.mf -C dist .
+	mv $(NOME_PACOTE) ./jars/.
 
 compilar-testes:
-	javac -cp $(NOME_PACOTE) tests/Test2.java
-	javac -cp $(NOME_PACOTE) tests/Test1.java
+	javac -cp ./jars/$(NOME_PACOTE) tests/Test2.java
+	javac -cp ./jars/$(NOME_PACOTE) tests/Test1.java
 
 executar-teste-servidor:
-	java -cp .:$(NOME_PACOTE) tests.Test1
+	java -cp .:./jars/$(NOME_PACOTE) tests.Test1
 
 executar-teste-cliente:
-	java -cp .:$(NOME_PACOTE) tests.Test2
+	java -cp .:./jars/$(NOME_PACOTE) tests.Test2

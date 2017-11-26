@@ -21,7 +21,7 @@ public class TrabSD {
 
 		Thread[] bgThreads = new Thread[4]; // Background Threads holder
 		
-		//Cria 2 Threads pra escutar Publishers
+		//Cria 1 Thread pra escutar Publishers
 		bgThreads[0] = new Thread(new ListenPublisher());
 		
 		

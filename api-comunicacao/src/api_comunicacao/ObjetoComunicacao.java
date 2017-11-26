@@ -25,6 +25,7 @@ public abstract class ObjetoComunicacao {
 	private int timeout;
 	private String ipCliente;
 	private int portaCliente;
+	public String resultado;
 
 	public ObjetoComunicacao(String ip, int porta, String ipDest, int portaDest, String dado, int timeout) throws java.lang.Exception{
 		this.setIp(ip);
@@ -35,6 +36,10 @@ public abstract class ObjetoComunicacao {
 		this.setTimeout(timeout);
 	}
 
+	public ObjetoComunicacao(String ip, int porta) throws java.lang.Exception{
+		this(ip, porta, null, -1, null, -1);
+	}
+
 	public ObjetoComunicacao(String ip, int porta, int timeout) throws java.lang.Exception{
 		this(ip, porta, null, -1, null, timeout);
 		// this.setIp(null);
@@ -43,7 +48,7 @@ public abstract class ObjetoComunicacao {
 		// this.setTimeout(timeout);
 	}
 
-	public abstract void sucesso(String resultado);
+	public abstract String sucesso(String resultado);
 	public abstract void erro(Exception e);
 	public abstract void fimEscuta();
 

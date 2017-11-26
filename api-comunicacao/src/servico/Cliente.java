@@ -10,7 +10,12 @@ import java.net.*;
 import lib.Debug;
 
 public abstract class Cliente {
-  public void enviar(String ip, int porta, String ipDest, int portaDest, String mensagem, int timeout)
+  public String enviar(String ip, int porta, String ipDest, int portaDest, String mensagem)
+   throws InterruptedIOException, IOException, Exception {
+    return this.enviar(ip, porta, ipDest, portaDest, mensagem, -1);
+  }
+
+  public String enviar(String ip, int porta, String ipDest, int portaDest, String mensagem, int timeout)
    throws InterruptedIOException, IOException, Exception {
     Socket cliente  = null;
     try {
@@ -18,7 +23,9 @@ public abstract class Cliente {
       Debug.println("Cliente: tentando conectar ao "+ipDest+" na porta: "+portaDest);
       
       cliente = new Socket(InetAddress.getByName(ipDest), portaDest);
-      cliente.setSoTimeout(timeout);
+      if(timeout <= 0){
+        cliente.setSoTimeout(timeout);
+      }
 
       if(!cliente.isBound()){
         Debug.println("Cliente: binding");
@@ -27,6 +34,9 @@ public abstract class Cliente {
       
       Debug.println("Cliente: enviando");
       escrever(cliente, mensagem);
+
+      Debug.println("Cliente: esperando resultado");
+      return ler(cliente);
     } finally {
       if(cliente != null){
         Debug.println("Cliente: fechando");

@@ -12,30 +12,11 @@ public class Test1{
 		try{
 
 			APIComunicacao.ligarServidor(new ObjetoComunicacao(ip, porta, 10000){
-				public void sucesso(String resultado){
+				public String sucesso(String resultado){
 					System.out.println("Recebida a requisição de "+this.getIpCliente());
 					System.out.println(resultado);
 					System.out.println("fim");
-				}
-				public void erro(Exception e){
-					System.out.println("Falha:"+e.getMessage());
-				}
-				public void fimEscuta(){
-					System.out.println("Fim da escuta.");
-					System.out.println("Nenhuma requisição foi estabelecida.");
-				}
-			});
-		} catch(Exception e){
-			System.err.println(e.getMessage());
-		}
-
-		try{
-
-			APIComunicacao.ligarServidor(new ObjetoComunicacao(ip, porta, 10000){
-				public void sucesso(String resultado){
-					System.out.println("Recebida a requisição de "+this.getIpCliente());
-					System.out.println(resultado);
-					System.out.println("fim");
+					return	null;
 				}
 				public void erro(Exception e){
 					System.out.println("Falha:"+e.getMessage());

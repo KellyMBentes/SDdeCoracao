@@ -14,10 +14,11 @@ public class Test2{
 		try{
 
 			APIComunicacao.enviar(new ObjetoComunicacao(ip, porta, ipServidor, portaServidor, "Olá, sou o cliente com IP "+ip, 10000){
-				public void sucesso(String resultado){
+				public String sucesso(String resultado){
 					System.out.println("Requisição enviada");
 					System.out.println(resultado);
 					System.out.println("fim");
+					return null;
 				}
 				public void erro(Exception e){
 					System.out.println("Falha:"+e.getMessage());
@@ -34,10 +35,11 @@ public class Test2{
 		try{
 
 			APIComunicacao.enviar(new ObjetoComunicacao(ip, porta, ipServidor, portaServidor, "Olá, sou o cliente com IP "+ip, 10000){
-				public void sucesso(String resultado){
+				public String sucesso(String resultado){
 					System.out.println("Requisição enviada");
 					System.out.println(resultado);
 					System.out.println("fim");
+					return null;
 				}
 				public void erro(Exception e){
 					System.out.println("Falha:"+e.getMessage());

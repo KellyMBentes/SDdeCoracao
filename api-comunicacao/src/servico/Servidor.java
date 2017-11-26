@@ -11,6 +11,10 @@ import servico.lib.ObjetoComunicacaoServidorString;
 import lib.Debug;
 
 public abstract class Servidor {
+  public void ligar(String  ip, int porta, ObjetoComunicacaoServidorString callback)
+    throws InterruptedIOException, IOException, Exception {
+    this.ligar(ip, porta, -1, callback);
+  }
   public void ligar(String  ip, int porta, int timeout, ObjetoComunicacaoServidorString callback)
     throws InterruptedIOException, IOException, Exception {
       ServerSocket servidor = null;
@@ -18,8 +22,10 @@ public abstract class Servidor {
       try{
 
         Debug.println("Servidor iniciado");
-        servidor = new ServerSocket(porta, 1, InetAddress.getByName(ip));
-        servidor.setSoTimeout(timeout);
+        servidor = new ServerSocket(porta, 2, InetAddress.getByName(ip));
+        if(timeout <= 0){
+          servidor.setSoTimeout(timeout);
+        }
 
         while(true){
           Debug.println("Servidor: aguardando cliente");
@@ -30,7 +36,10 @@ public abstract class Servidor {
           Debug.println("Servidor: lendo mensagem");
           String mensagem = ler(cliente);
           Debug.println("Servidor: chamando callback");
-          callback.sucesso(mensagem, cliente);
+          String resultado = callback.sucesso(mensagem, cliente);
+
+          Debug.println("Servidor: enviando resultado.");
+          escrever(cliente, resultado);
         }
 
       } finally {

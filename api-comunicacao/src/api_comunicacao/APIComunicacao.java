@@ -28,7 +28,7 @@ public class APIComunicacao {
 			String dado = obj.getDado();
 			int timeout = obj.getTimeout();
 
-			cliente.enviar(ip, porta, ipDest, portaDest, dado, timeout);
+			obj.resultado = cliente.enviar(ip, porta, ipDest, portaDest, dado, timeout);
 		} catch (java.io.InterruptedIOException e) {
 			obj.fimEscuta();
 		} catch (Exception e) {
@@ -45,7 +45,7 @@ public class APIComunicacao {
 			int timeout = obj.getTimeout();
 
 			servidor.ligar(ip, porta, timeout, new ObjetoComunicacaoServidorString(){
-				public void sucesso(String val, Socket cliente){
+				public String sucesso(String val, Socket cliente){
 					String ip = cliente.getInetAddress().getHostAddress();
 					int porta = cliente.getPort();
 
@@ -54,7 +54,7 @@ public class APIComunicacao {
 
 					obj.setIpCliente(ip);
 					obj.setPortaCliente(porta);
-					obj.sucesso(val);
+					return obj.sucesso(val);
 				}
 			});
 

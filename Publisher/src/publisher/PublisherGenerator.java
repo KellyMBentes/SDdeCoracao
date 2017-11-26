@@ -31,7 +31,7 @@ public class PublisherGenerator extends Thread implements Runnable {
     private static String ip = null;
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        ServerSocket serverSocket0 = new ServerSocket(5000);
+        //ServerSocket serverSocket0 = new ServerSocket(5000);
         PublisherGenerator.ip = PublisherGenerator.getParametro("ip", args);
 
         PublisherGenerator p1 = new PublisherGenerator();

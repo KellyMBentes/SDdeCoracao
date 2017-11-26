@@ -27,17 +27,7 @@ public class Publisher implements Runnable {
         this.is = new DataInputStream(socket.getInputStream());
 
     }
-// declaration section:
-// smtpClient: our client socket
-// os: output stream// declaration section:
-// smtpClient: our client socket
-// os: output stream
 
-// Initialization section:
-// Try to open a socket on port 3223
-// Try to open input and output streams
-//    public void publish() throws IOException {
-//     }
     public Socket getSocket() {
         return this.socket;
     }
@@ -79,6 +69,13 @@ public class Publisher implements Runnable {
         } catch (IOException ex) {
             System.out.println("deu ruim");
             Logger.getLogger(Publisher.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                os.close();
+                socket.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Publisher.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         PublisherGenerator.defaultTags[this.tag] = true;   

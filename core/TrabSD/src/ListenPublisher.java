@@ -14,21 +14,27 @@ public class ListenPublisher implements Runnable{
 			// Caso chegue uma mensagem instancia e salva a mensagem no BD
 			try {
 				ObjetoComunicacao oc = new ObjetoComunicacao(cs.localIP, 5000, 5000){
-					@Override
 					public void sucesso(String resultado){
-						String[] msgSplitted = resultado.split(",");
+						System.out.println("--Publisher:: A string resultado foi: "+ resultado);
+						System.out.println("--Publisher ip: "+this.getIpCliente());
 						
-						Message msg = new Message((Integer.parseInt(msgSplitted[0])!=0), (Integer.parseInt(msgSplitted[1])!=0), (Integer.parseInt(msgSplitted[2])!=0), msgSplitted[3]);
-						msg.saveInBD();
+						if(resultado != null){
+							String[] msgSplitted = resultado.split(",");
+//							for(int i = 0; i < msgSplitted.length; i++){
+//								System.out.println("msgSplitted["+i+"] eh: "+msgSplitted[i]);
+//							}
+							
+							Message msg = new Message(Integer.parseInt(msgSplitted[0]), Integer.parseInt(msgSplitted[1]), Integer.parseInt(msgSplitted[2]), msgSplitted[3]);
+							msg.saveInBD();
+						}
 					}
 	
-					@Override
 					public void erro(Exception e) {
 						System.out.println("Deu erro na thread tipo ListenPublisher: "+Thread.currentThread().getName());
 						e.printStackTrace();
+						Thread.currentThread().interrupt();
 					}
 	
-					@Override
 					public void fimEscuta() {}
 				};
 				APIComunicacao.ligarServidor(oc);

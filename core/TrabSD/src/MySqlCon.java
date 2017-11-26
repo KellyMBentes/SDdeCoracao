@@ -83,7 +83,7 @@ public final class MySqlCon {
             Statement stmt=con.createStatement();  
             ResultSet rs=stmt.executeQuery("SELECT * FROM DB_MIDDLEWARE.client");           
             while(rs.next())
-            	ans.add(new Client(rs.getInt(1), rs.getBoolean(2), rs.getBoolean(3), rs.getBoolean(4), rs.getString(5)));  
+            	ans.add(new Client(rs.getInt(1), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getString(2)));  
             con.close();  
         }catch(Exception e){ System.out.println(e);}
 		

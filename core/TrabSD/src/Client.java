@@ -1,20 +1,22 @@
 
 public class Client {
     private int id;
-    private boolean[] tags;
+    private int[] tags;
     private String endereco;
     
     
-    public Client(int id, boolean a, boolean b, boolean c, String endereco){
+    public Client(int id, int a, int b, int c, String endereco){
         this.id = id;
+        this.tags = new int[3];
         this.tags[0] = a;
         this.tags[1] = b;
         this.tags[2] = c;
         this.endereco = endereco;
     }
     
-    public Client(boolean a, boolean b, boolean c, String endereco){
+    public Client(int a, int b, int c, String endereco){
         this.id = 999; //caso seja inserido verificar id errada
+        this.tags = new int[3];
         this.tags[0] = a;
         this.tags[1] = b;
         this.tags[2] = c;
@@ -25,7 +27,7 @@ public class Client {
         return this.id;
     }
     
-    public boolean[] getTags(){
+    public int[] getTags(){
         return this.tags;
     }
     
@@ -37,7 +39,7 @@ public class Client {
         this.id = id;
     }
     
-    public void setTags(boolean[] t){
+    public void setTags(int[] t){
         this.tags = t;
     }
     
@@ -46,7 +48,7 @@ public class Client {
     }
     
     public void saveInBD() throws Exception{
-    	int autoId = MySqlCon.executeInsert("INSERT INTO DB_MIDDLEWARE.client (a,b,c,address) VALUES ("+tags[0]+","+tags[1]+","+tags[2]+","+endereco+")");
+    	int autoId = MySqlCon.executeInsert("INSERT INTO `DB_MIDDLEWARE`.`client` (tag_A,tag_B,tag_C,address) VALUES ("+tags[0]+","+tags[1]+","+tags[2]+",'"+endereco+"')");
     	
     	if(autoId < 0)
     		throw new Exception("Auto Key de ID foi retornado como "+autoId);
@@ -55,7 +57,7 @@ public class Client {
     }
     
     public void updateEnd(){
-    	MySqlCon.excuteUpdate("UPDATE DB_MIDDLEWARE.client SET ADDRESS = "+endereco+" WHERE ID = "+id);
+    	MySqlCon.excuteUpdate("UPDATE `DB_MIDDLEWARE`.`client` SET `ADDRESS` = "+endereco+" WHERE `ID` = "+id);
     }
     
     @Override

@@ -20,26 +20,31 @@ public class TemporizadorEnvioMsg implements Runnable {
 			}
 			
 			//Pega msgs para serem enviadas
-			ArrayList<MensagemParaEnviar> listaMsgs;
-			listaMsgs = MySqlCon.getMsgsToSend();
+			ArrayList<MensagemParaEnviar> listaMsgs = new ArrayList<MensagemParaEnviar>();
+//			listaMsgs = MySqlCon.getMsgsToSend();
+			
+			listaMsgs.add(new MensagemParaEnviar(99, 98, "192.168.0.101", "Ola", 0));
+			cs.idsAtivos.add(99);
 			
 			//Solicita API para mandar msgs se Cliente online
 			for(MensagemParaEnviar msg : listaMsgs){
 				if(cs.idsAtivos.contains(msg.getIdClient())){
+					System.out.println("Enviando msg id: "+msg.getId()+" para ip: "+msg.getClientEnd());
 					try {
-						ObjetoComunicacao oc = new ObjetoComunicacao(cs.localIP, 5001, msg.getClientEnd(), 4444, msg.getContent(), 500) {
+						ObjetoComunicacao oc = new ObjetoComunicacao(cs.localIP, 5003, msg.getClientEnd(), 5003, msg.getContent(), 500) {
 							
-							@Override
 							public void sucesso(String resultado) {
 								// Apos enviar deve ter confimacao de envio, caso positivo propagar para banco
-								MySqlCon.confirmReceived(msg.getId());								
+								System.out.println("Mensagem id "+msg.getId()+"recebida pelo sub id: "+msg.getIdClient());
+//								MySqlCon.confirmReceived(msg.getId());								
 							}
 							
-							@Override
 							public void fimEscuta() {}
 							
-							@Override
-							public void erro(Exception e) {e.printStackTrace();}
+							public void erro(Exception e) {
+								e.printStackTrace();
+//								Thread.currentThread().interrupt();
+							}
 							
 						};APIComunicacao.enviar(oc);
 					} catch (Exception e) {

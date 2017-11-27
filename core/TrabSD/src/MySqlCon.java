@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public final class MySqlCon {
 	private static final String USERNAME = "root";
 	private static final String PASSWORD = "admin";
+	private static final String CON_STRING = "jdbc:mysql://localhost:3306/db_middleware?useSSL=false";
 	
 	private MySqlCon(){
 		
@@ -14,8 +15,7 @@ public final class MySqlCon {
 		
 		try{  
             Class.forName("com.mysql.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/db_middleware",USERNAME,PASSWORD);  
+            Connection con=DriverManager.getConnection(CON_STRING,USERNAME,PASSWORD);  
             //here db_middleware is database name  
             Statement stmt=con.createStatement();  
             stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
@@ -34,8 +34,7 @@ public final class MySqlCon {
 	public static void excuteUpdate(String query){
 		try{  
             Class.forName("com.mysql.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/db_middleware",USERNAME,PASSWORD);  
+            Connection con=DriverManager.getConnection(CON_STRING,USERNAME,PASSWORD);  
             //here db_middleware is database name  
             Statement stmt=con.createStatement();  
             stmt.executeUpdate(query);
@@ -46,8 +45,7 @@ public final class MySqlCon {
 	public static void confirmReceived(int id){
 		try{  
             Class.forName("com.mysql.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/db_middleware",USERNAME,PASSWORD);  
+            Connection con=DriverManager.getConnection(CON_STRING,USERNAME,PASSWORD);  
             //here db_middleware is database name  
             Statement stmt=con.createStatement();  
             stmt.executeUpdate("UPDATE `db_middleware`.`message_client` SET received = 1 WHERE id = "+id);
@@ -60,8 +58,7 @@ public final class MySqlCon {
 		ArrayList<MensagemParaEnviar> ans = new ArrayList<MensagemParaEnviar>();
 		try{  
             Class.forName("com.mysql.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/db_middleware",USERNAME,PASSWORD);  
+            Connection con=DriverManager.getConnection(CON_STRING,USERNAME,PASSWORD);  
             //here db_middleware is database name  
             Statement stmt=con.createStatement();  
             ResultSet rs=stmt.executeQuery("SELECT MC.id, MC.id_client, C.address, M.content, MC.received FROM DB_MIDDLEWARE.message_client AS MC JOIN DB_MIDDLEWARE.client AS C ON MC.id_client = C.id JOIN DB_MIDDLEWARE.message AS M ON MC.id_message = M.id WHERE MC.received = 0;");           
@@ -77,8 +74,7 @@ public final class MySqlCon {
 		ArrayList<Client> ans = new ArrayList<Client>();
 		try{  
             Class.forName("com.mysql.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/db_middleware",USERNAME,PASSWORD);  
+            Connection con=DriverManager.getConnection(CON_STRING,USERNAME,PASSWORD);  
             //here db_middleware is database name  
             Statement stmt=con.createStatement();  
             ResultSet rs=stmt.executeQuery("SELECT * FROM DB_MIDDLEWARE.client");           

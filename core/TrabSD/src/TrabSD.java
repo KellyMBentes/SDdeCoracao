@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 public class TrabSD {
 
-	private static final String FORMATO_PARAMETRO = "-{:nome:}";
-
 	public static void main(String[] args) {
 
 		System.out.println("*****Thread: Main started*****");

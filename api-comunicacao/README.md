@@ -1,5 +1,7 @@
 # API de Comunicação
 
+Última versão: 1.1.3
+
 Esta API busca solucionar problemas de sistemas que precisam tornar transparente a conexão com cliente.
 Ela gerencia ID's de usuários com seus devidos IP de forma paralela e também provê uma interface de comunicação para envio e recebimento de dados.
 
@@ -9,46 +11,39 @@ Para usar a API de Comunicação, basta importar para o seu projeto o arquivo ap
 1. Importe as classes `APIComunicacao` e `ObjetoComunicacao`.
 ```java
 import api_comunicacao.APIComunicacao;
-import api_comunicacao.ObjetoComunicacao;
+import api_comunicacao.modelo.ObjetoComunicacao;
+import api_comunicacao.modelo.ObjetoComunicacaoCliente;
 ```
+  A API provê dois serviços: **ligar o servidor e aguardar uma mensagem** e **enviar uma mensagem**.
 
-2. Para ligar o servidor, basta usar o método `ligarServidor` da classe `APIComunicacao`. Passe como parâmetro uma instância de `ObjetoComunicacao` informando os parâmetros **ip do servidor**, **porta do servidor** e **timeout** (tempo de espera).
-Além disso, implemente as funções:
+2. Para ligar o servidor, basta usar o método `ligarServidor` da classe `APIComunicacao`. Passe como parâmetro uma instância de `ObjetoComunicacao`, informando os seguintes parâmetros:
 
-* `sucesso`: Que será chamada quando o servidor receber uma mensagem de algum cliente. Essa função espera receber como parâmetro uma `String` enviada pelo cliente.
+* **ip**: (String) o endereço ip cujo servidor será associado
+* **porta**: (int) a porta cujo servidor ficará ouvindo
+* **timeout** (int) o tempo que esse ficará esperando por um cliente. (opcional)
   
-* `erro`: Que será chamada quando ocorrer algum erro. Espera receber uma exceção (`Exception`).
-  
-* `fimEscuta`: Que é chamada quando o servidor fica esperando por um tempo maior que o tempo definido pelo atributo `timeout` do objeto. Não recebe nenhum parâmetro.
-  
+  Além disso, implemente as seguintes funções:
 
+* `sucesso`: Esta função será chamada quando o servidor receber uma mensagem de algum cliente. Recebe como parâmetro:
+  * **val**: (String) contém a mensagem enviada pelo cliente para o servidor.
+  
+E deve retornar uma mensagem que será enviada para o cliente (String).
+  
+* `erro`: Esta função será chamada quando ocorrer algum erro dentro da API. Espera receber uma exceção (`Exception`).
+
+* `fimEscuta`: Será chamada quando o servidor fica esperando por uma requisição durante um tempo maior que o tempo definido pelo atributo **timeout** do objeto. Não recebe nenhum parâmetro.
+  
+A seguin um exemplo de implementação:
+  
 ```java
 APIComunicacao.ligarServidor(new ObjetoComunicacao(ip, porta, 10000){
-	public void sucesso(String resultado){
+	public String sucesso(String resultado){
 		System.out.println("Recebida a requisição de "+this.getIpCliente());
 		System.out.println(resultado);
 		System.out.println("fim");
+		System.out.println("Enviando mensagem para o cliente: 200");
+		return	"200";
 	}
-	public void erro(Exception e){
-		System.out.println("Falha:"+e.getMessage());
-	}
-	public void fimEscuta(){
-		System.out.println("Fim da escuta.");
-		System.out.println("Nenhuma requisição foi estabelecida.");
-	}
-}
-```
-
-3. Para enviar uma requisição, basta chamar a função `enviar` da classe `APIComunicacao`. Passe como parâmetro uma instância de `ObjetoComunicacao` informando os parâmetros **ip do cliente**, **porta do cliente**, **ip do servidor**, **porta do servidor** e **timeout** (tempo de espera).
-  Semelhantemente, é necessária a implementação das funções `sucesso`, `erro`, `fimEscuta`.
-  
-```java
-APIComunicacao.enviar(new ObjetoComunicacao(ip, porta, "192.168.0.1", 5000, "Olá, sou o cliente com IP "+ip, 10000){
-	public void sucesso(String resultado){
-		System.out.println("Requisição enviada");
-		System.out.println(resultado);
-		System.out.println("fim");
-  	}
 	public void erro(Exception e){
 		System.out.println("Falha:"+e.getMessage());
 	}
@@ -58,18 +53,44 @@ APIComunicacao.enviar(new ObjetoComunicacao(ip, porta, "192.168.0.1", 5000, "Ol�
 	}
 });
 ```
+Perceba que o Servidor tem acesso ao ip do cliente através da funcão `getIpCliente` do objeto.
+Além disso, retorna para o usuário o código **200**.
+
+3. Para enviar uma mensagem, basta chamar a função `enviar` da classe `APIComunicacao`. Passe como parâmetro uma instância de `ObjetoComunicacaoCliente` informando os parâmetros:
+
+* **ip**: (String) endereço ip a qual o cliente estará associado.
+* **porta**: (int) porta sob a qual o cliente estará associado.
+* **ip do servidor**: endereço de destino da mensagem.
+* **porta do servidor**: porta de destino da mensagem.
+* **timeout**: (int) o tempo de espera (opcional).
+
+É necessária apenas a implementação das funções `erro` e `fimEscuta`.
+  
+```java
+ObjetoComunicacaoCliente occ = new ObjetoComunicacaoCliente(ip, porta, ipServidor, portaServidor, "Olá, sou o cliente com IP "+ip, 10000){
+	public void erro(Exception e){
+		System.out.println("Falha:"+e.getMessage());
+	}
+	public void fimEscuta(){
+		System.out.println("Fim da escuta.");
+		System.out.println("Nenhuma requisição foi estabelecida.");
+	}
+};
+APIComunicacao.enviar(occ);		
+System.out.println(">> Resultado da consulta 1: "+occ.resultado);
+APIComunicacao.enviar(occ);
+System.out.println(">> Resultado da consulta 2: "+occ.resultado);
+```
 
 4. No momento de compilar, adicione o jar:
 
 ```
 javac -cp api_comunicacao_1.0.0.jar [demais arquivos do seu projeto *.java]
-
 ```
 5. e também no momento de executar
 
 ```
 java -cp .:api_comunicacao_1.0.0.jar [demais arquivos do seu projeto]
-
 ```
 
 ## Contribuindo
@@ -111,7 +132,7 @@ make compilar
 ### Testes
 
 Caso deseja rodar alguns "testes" implementados, basta compilá-los e executá-los.
-Na atual versão, foram implementados um teste servidor e cliente. Antes, é necessário criar a interface de rede com os ip's _192.168.0.1_ e _192.168.0.2_.
+Na atual versão, foram implementados um teste servidor e cliente. Antes, é necessário criar a interface de rede com os ip's _192.168.122.10_ e _192.168.122.11_.
 
 ```
 make compilar-testes

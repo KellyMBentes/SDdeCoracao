@@ -1,7 +1,8 @@
 JSON_VERSION = 1.1.1
 NOME_PACOTE = api_comunicacao_$(API_VERSION).jar
-API_VERSION = 1.0.1
-CLASSPATH = src
+API_VERSION = 1.1.0
+CLASSPATH = src/
+CLASSPATHDEST = dist/
 
 instalar:
 	mkdir -p lib
@@ -11,11 +12,11 @@ limpar:
 
 compilar:
 	mkdir -p lib
-	mkdir -p dist
+	mkdir -p $(CLASSPATHDEST)
 	mkdir -p jars
 	find ./lib -name "*.jar" > .classpath
 	find ./src -name "*.java" >> .classpath
-	javac -d dist/ -cp @.classpath
+	javac -d $(CLASSPATHDEST) @.classpath -cp $(CLASSPATH)
 	jar cfm $(NOME_PACOTE) manifest.mf -C dist .
 	mv $(NOME_PACOTE) ./jars/.
 

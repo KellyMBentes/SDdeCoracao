@@ -6,20 +6,20 @@ import java.io.InterruptedIOException;
 import java.net.Socket;
 import java.net.InetAddress;
 
-import api_comunicacao.ObjetoComunicacao;
-import lib.Debug;
-import servico.lib.FabricaCliente;
-import servico.lib.FabricaServidor;
-import servico.Cliente;
-import servico.Servidor;
-import servico.lib.ObjetoComunicacaoServidorString;
+import api_comunicacao.modelo.ObjetoComunicacao;
+import api_comunicacao.lib.Debug;
+import api_comunicacao.servico.fabrica.FabricaCliente;
+import api_comunicacao.servico.fabrica.FabricaServidor;
+import api_comunicacao.servico.SocketCliente;
+import api_comunicacao.servico.SocketServidor;
+import api_comunicacao.servico.modelo.ObjetoComunicacaoServidorString;
 
 public class APIComunicacao {
 	private static final String tipo = "";
 
 	public static void enviar(ObjetoComunicacao obj){
 		try{
-			Cliente cliente = FabricaCliente.getCliente(tipo);
+			SocketCliente cliente = FabricaCliente.getCliente(tipo);
 
 			String ip = obj.getIp();
 			int porta = obj.getPorta();
@@ -38,7 +38,7 @@ public class APIComunicacao {
 
 	public static void ligarServidor(ObjetoComunicacao obj){
 		try {
-			Servidor servidor = FabricaServidor.getServidor(tipo);
+			SocketServidor servidor = FabricaServidor.getServidor(tipo);
 
 			String ip = obj.getIp();
 			int porta = obj.getPorta();

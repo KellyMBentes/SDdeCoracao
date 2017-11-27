@@ -1,7 +1,7 @@
-package api_comunicacao;
+package api_comunicacao.modelo;
 
-import lib.IllegalArgumentIntException;
-import lib.IllegalArgumentStrException;
+import api_comunicacao.lib.IllegalArgumentIntException;
+import api_comunicacao.lib.IllegalArgumentStrException;
 
 public abstract class ObjetoComunicacao {
 	// NN: not null ou not negative
@@ -42,10 +42,6 @@ public abstract class ObjetoComunicacao {
 
 	public ObjetoComunicacao(String ip, int porta, int timeout) throws java.lang.Exception{
 		this(ip, porta, null, -1, null, timeout);
-		// this.setIp(null);
-		// this.setPorta(porta);
-		// this.setDado(null);
-		// this.setTimeout(timeout);
 	}
 
 	public abstract String sucesso(String resultado);

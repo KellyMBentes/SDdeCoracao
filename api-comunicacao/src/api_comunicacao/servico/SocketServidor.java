@@ -1,4 +1,4 @@
-package servico;
+package api_comunicacao.servico;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -7,10 +7,10 @@ import java.util.Scanner;
 import java.net.*;
 import java.util.Scanner;
 
-import servico.lib.ObjetoComunicacaoServidorString;
-import lib.Debug;
+import api_comunicacao.servico.modelo.ObjetoComunicacaoServidorString;
+import api_comunicacao.lib.Debug;
 
-public abstract class Servidor {
+public abstract class SocketServidor {
   public void ligar(String  ip, int porta, ObjetoComunicacaoServidorString callback)
     throws InterruptedIOException, IOException, Exception {
     this.ligar(ip, porta, -1, callback);

@@ -1,4 +1,4 @@
-package servico;
+package api_comunicacao.servico;
 
 import java.lang.Exception;
 import java.io.IOException;
@@ -7,9 +7,9 @@ import java.io.PrintStream;
 import java.util.Scanner;
 import java.net.*;
 
-import lib.Debug;
+import api_comunicacao.lib.Debug;
 
-public abstract class Cliente {
+public abstract class SocketCliente {
   public String enviar(String ip, int porta, String ipDest, int portaDest, String mensagem)
    throws InterruptedIOException, IOException, Exception {
     return this.enviar(ip, porta, ipDest, portaDest, mensagem, -1);

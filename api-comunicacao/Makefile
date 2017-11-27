@@ -1,6 +1,6 @@
 JSON_VERSION = 1.1.1
 NOME_PACOTE = api_comunicacao_$(API_VERSION).jar
-API_VERSION = 1.1.0
+API_VERSION = 1.1.1
 CLASSPATH = src/
 CLASSPATHDEST = dist/
 

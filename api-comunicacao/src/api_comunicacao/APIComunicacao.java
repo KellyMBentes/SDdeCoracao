@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.InetAddress;
 
 import api_comunicacao.modelo.ObjetoComunicacao;
+import api_comunicacao.modelo.ObjetoComunicacaoCliente;
 import api_comunicacao.lib.Debug;
 import api_comunicacao.servico.fabrica.FabricaCliente;
 import api_comunicacao.servico.fabrica.FabricaServidor;
@@ -17,7 +18,7 @@ import api_comunicacao.servico.modelo.ObjetoComunicacaoServidorString;
 public class APIComunicacao {
 	private static final String tipo = "";
 
-	public static void enviar(ObjetoComunicacao obj){
+	public static void enviar(ObjetoComunicacaoCliente obj){
 		try{
 			SocketCliente cliente = FabricaCliente.getCliente(tipo);
 

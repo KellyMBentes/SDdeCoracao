@@ -1,15 +1,16 @@
 public class Message {
-    private boolean[] tags;
+    private int[] tags;
     private String content;
     
-    public Message(boolean a, boolean b, boolean c, String msg){
-        this.tags[0] = a;
+    public Message(int a, int b, int c, String msg){
+        this.tags = new int[3];
+    	this.tags[0] = a;
         this.tags[1] = b;
         this.tags[2] = c;
         this.content = msg;
     }
     
-    public boolean[] getTags(){
+    public int[] getTags(){
         return this.tags;
     }
     
@@ -17,7 +18,7 @@ public class Message {
         return this.content;
     }
     
-    public void setTags(boolean[] t){
+    public void setTags(int[] t){
         this.tags = t;
     }
     
@@ -26,6 +27,6 @@ public class Message {
     }
     
     public int saveInBD(){
-    	return MySqlCon.executeInsert("INSERT INTO DB_MIDDLEWARE.message (a,b,c,content) VALUES ("+tags[0]+","+tags[1]+","+tags[2]+","+content+")");
+    	return MySqlCon.executeInsert("INSERT INTO `DB_MIDDLEWARE`.`message` (`tag_A`,`tag_B`,`tag_C`,`content`) VALUES ("+tags[0]+","+tags[1]+","+tags[2]+",'"+content+"');");
     }
 }

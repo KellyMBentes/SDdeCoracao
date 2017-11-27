@@ -39,7 +39,7 @@ public class ControlShared {
 
 	public void setLocalIp(String val) throws IllegalArgumentException{
 		if(val == null || val.trim().equals("")){
-			new IllegalArgumentException("valor de ip inválido.");
+			new IllegalArgumentException("valor de ip invalido.");
 		}
 		this.localIP = val;
 	}

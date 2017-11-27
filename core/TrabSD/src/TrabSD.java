@@ -2,26 +2,25 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import lib.Debug;
-
 public class TrabSD {
 
 	private static final String FORMATO_PARAMETRO = "-{:nome:}";
 
 	public static void main(String[] args) {
-		ControlShared.getInstance().setLocalIp(getParametro("ipLocal", args));
-		Debug.DEBUG = getParametro("debug", args).trim().equals("true");
 
 		System.out.println("*****Thread: Main started*****");
 		
 		// Cria Singleton do controle de variaveis compartilhadas
 		ControlShared cs = ControlShared.getInstance();
-		if(cs.equals(null))
+		if(cs == null)
 			System.exit(0);
+		
+		System.out.println("--O ip local eh: "+ cs.localIP);
+		
 
 		Thread[] bgThreads = new Thread[4]; // Background Threads holder
 		
-		//Cria 1 Thread pra escutar Publishers
+		//Cria Thread pra escutar Publishers
 		bgThreads[0] = new Thread(new ListenPublisher());
 		
 		
@@ -51,14 +50,23 @@ public class TrabSD {
 						InetAddress iNet;
 						ArrayList<Integer> toRemoveList = new ArrayList<Integer>();
 						
+						System.out.print("Lista ids ativos: {");
+						for(int i : cs.idsAtivos){
+							System.out.print(i+",");
+						}
+						System.out.println("}");
+						
 						for(int id : cs.idsAtivos){
 							for (Client cli : cs.listaClientes){
 								if(id == cli.getId()){
+									System.out.println("Entrei no if.");
 									try {
 										iNet = InetAddress.getByName(cli.getEndereco());
 										if(!iNet.isReachable(500)){
+											System.out.println("--Cliente id: "+cli.getId()+" não respondeu ping.");
 											toRemoveList.add(id);
 										}
+										else{System.out.println("--Ping deu certo pro id: "+cli.getId());}
 											
 									} catch (Exception e) {
 										// TODO Auto-generated catch block
@@ -100,18 +108,7 @@ public class TrabSD {
         }
 		
 		System.out.println("****Thread: Main terminando****");
-	
+		System.exit(0);
 	}
-
-	private static String getParametro(String nomeParametro, String args[]){
-        String resultado = null;
-        String nomeParametroFormatado = FORMATO_PARAMETRO.replace("{:nome:}",nomeParametro);
-        for (int i = 0; i < args.length; i++){
-            if(args[i].equals(nomeParametroFormatado) && i+1 < args.length){
-                resultado = args[i+1];
-            }
-        }
-        return resultado;
-    }
 	
 }

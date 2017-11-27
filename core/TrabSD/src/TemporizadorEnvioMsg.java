@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import api_comunicacao.APIComunicacao;
-import api_comunicacao.ObjetoComunicacao;
+import api_comunicacao.modelo.*;
 
 public class TemporizadorEnvioMsg implements Runnable {
 
@@ -20,28 +20,31 @@ public class TemporizadorEnvioMsg implements Runnable {
 			}
 			
 			//Pega msgs para serem enviadas
-			ArrayList<MensagemParaEnviar> listaMsgs;
+			ArrayList<MensagemParaEnviar> listaMsgs = new ArrayList<MensagemParaEnviar>();
 			listaMsgs = MySqlCon.getMsgsToSend();
 			
 			//Solicita API para mandar msgs se Cliente online
 			for(MensagemParaEnviar msg : listaMsgs){
 				if(cs.idsAtivos.contains(msg.getIdClient())){
+					System.out.println("Enviando msg: "+msg.getContent()+" -> para ip: "+msg.getClientEnd());
 					try {
-						ObjetoComunicacao oc = new ObjetoComunicacao(cs.localIP, 5001, msg.getClientEnd(), 4444, msg.getContent(), 500) {
-							
-							@Override
-							public void sucesso(String resultado) {
-								// Apos enviar deve ter confimacao de envio, caso positivo propagar para banco
-								MySqlCon.confirmReceived(msg.getId());								
-							}
+						ObjetoComunicacaoCliente occ = new ObjetoComunicacaoCliente(cs.localIP, 5003, msg.getClientEnd(), 5003, msg.getContent(), 500) {
 							
 							@Override
 							public void fimEscuta() {}
 							
 							@Override
-							public void erro(Exception e) {e.printStackTrace();}
-							
-						};APIComunicacao.enviar(oc);
+							public void erro(Exception e) {
+								e.printStackTrace();
+							}
+						};
+						APIComunicacao.enviar(occ);
+						
+						if(occ.resultado.equals("ok")){
+							MySqlCon.confirmReceived(msg.getId());
+							System.out.println("Mensagem recebida com sucesso no ip: "+msg.getClientEnd());
+						}
+						
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

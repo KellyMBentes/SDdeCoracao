@@ -10,6 +10,9 @@ import java.net.*;
 import api_comunicacao.lib.Debug;
 
 public abstract class SocketCliente {
+  private PrintStream saida;
+  private Scanner entrada;
+
   public String enviar(String ip, int porta, String ipDest, int portaDest, String mensagem)
    throws InterruptedIOException, IOException, Exception {
     return this.enviar(ip, porta, ipDest, portaDest, mensagem, -1);
@@ -20,45 +23,49 @@ public abstract class SocketCliente {
     Socket cliente  = null;
     try {
       Debug.println("Cliente: iniciando");
-      Debug.println("Cliente: tentando conectar ao "+ipDest+" na porta: "+portaDest);
       
-      cliente = new Socket(InetAddress.getByName(ipDest), portaDest);
+      cliente = new Socket();
+      cliente.setReuseAddress(true);
       if(timeout <= 0){
         cliente.setSoTimeout(timeout);
       }
+      // if(!cliente.isBound()){
+      Debug.println("Cliente: acessando através do endereço: "+ip+":"+porta);
+      cliente.bind(new InetSocketAddress(ip, porta));
+      Debug.println("Cliente: tentando conectar ao "+ipDest+": "+portaDest);
+      cliente.connect(new InetSocketAddress(ipDest, portaDest));
+      // }
 
-      if(!cliente.isBound()){
-        Debug.println("Cliente: binding");
-        cliente.bind(new InetSocketAddress(ip, porta));
-      }
       
       Debug.println("Cliente: enviando");
       escrever(cliente, mensagem);
 
       Debug.println("Cliente: esperando resultado");
-      return ler(cliente);
+      String resposta = ler(cliente);
+
+      Debug.println("Cliente: resposta servidor: "+resposta);
+      return resposta;
     } finally {
+      if(this.entrada != null){this.entrada.close();}
+      if(this.saida != null){this.saida.close();}
       if(cliente != null){
         Debug.println("Cliente: fechando");
         cliente.close();
-        try { Thread.sleep(500); } catch (InterruptedException ex) {}
+        try { Thread.sleep(1000); } catch (InterruptedException ex) {}
       }
     }
   }
 
   public void escrever(Socket cliente, String mensagem) throws IOException{
-    PrintStream saida = new PrintStream(cliente.getOutputStream());
-    saida.println(mensagem);
-    saida.close();
+    this.saida = new PrintStream(cliente.getOutputStream());
+    this.saida.println(mensagem);
+    this.saida.flush();
   }
 
   public String ler(Socket cliente) throws IOException{
     String resultado = "";
-    Scanner entrada = new Scanner(cliente.getInputStream());
-    while (entrada.hasNextLine()) {
-      resultado += entrada.nextLine();
-    }
-    entrada.close();
+    this.entrada = new Scanner(cliente.getInputStream());
+    resultado += this.entrada.nextLine();
     return resultado;
   }
 }

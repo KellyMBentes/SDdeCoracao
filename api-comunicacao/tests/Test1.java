@@ -1,7 +1,8 @@
 package tests;
 
 import api_comunicacao.*;
-import lib.Debug;
+import api_comunicacao.modelo.*;
+import api_comunicacao.lib.Debug;
 
 public class Test1{
 	public static void main(String[] args){
@@ -10,13 +11,13 @@ public class Test1{
 		Debug.DEBUG = true;
 		System.out.println("Servidor iniciado no endereco: "+ip+" porta: "+porta);
 		try{
-
 			APIComunicacao.ligarServidor(new ObjetoComunicacao(ip, porta, 10000){
 				public String sucesso(String resultado){
 					System.out.println("Recebida a requisição de "+this.getIpCliente());
 					System.out.println(resultado);
 					System.out.println("fim");
-					return	null;
+					System.out.println("Enviando mensagem para o cliente: 200");
+					return	"200";
 				}
 				public void erro(Exception e){
 					System.out.println("Falha:"+e.getMessage());
@@ -28,6 +29,7 @@ public class Test1{
 			});
 		} catch(Exception e){
 			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

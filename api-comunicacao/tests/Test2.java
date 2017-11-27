@@ -1,7 +1,8 @@
 package tests;
 
 import api_comunicacao.*;
-import lib.Debug;
+import api_comunicacao.modelo.*;
+import api_comunicacao.lib.Debug;
 
 public class Test2{
 	public static void main(String[] args){
@@ -12,14 +13,7 @@ public class Test2{
 		Debug.DEBUG = true;
 		System.out.println("Cliente iniciado no endereco: "+ip+" porta: "+porta);
 		try{
-
-			APIComunicacao.enviar(new ObjetoComunicacao(ip, porta, ipServidor, portaServidor, "Olá, sou o cliente com IP "+ip, 10000){
-				public String sucesso(String resultado){
-					System.out.println("Requisição enviada");
-					System.out.println(resultado);
-					System.out.println("fim");
-					return null;
-				}
+			ObjetoComunicacaoCliente occ = new ObjetoComunicacaoCliente(ip, porta, ipServidor, portaServidor, "Olá, sou o cliente com IP "+ip, 10000){
 				public void erro(Exception e){
 					System.out.println("Falha:"+e.getMessage());
 				}
@@ -27,30 +21,13 @@ public class Test2{
 					System.out.println("Fim da escuta.");
 					System.out.println("Nenhuma requisição foi estabelecida.");
 				}
-			});
-		} catch(Exception e){
-			System.err.println(e.getMessage());
-		}
-		
-		try{
+			};
+			APIComunicacao.enviar(occ);
+			APIComunicacao.enviar(occ);
 
-			APIComunicacao.enviar(new ObjetoComunicacao(ip, porta, ipServidor, portaServidor, "Olá, sou o cliente com IP "+ip, 10000){
-				public String sucesso(String resultado){
-					System.out.println("Requisição enviada");
-					System.out.println(resultado);
-					System.out.println("fim");
-					return null;
-				}
-				public void erro(Exception e){
-					System.out.println("Falha:"+e.getMessage());
-				}
-				public void fimEscuta(){
-					System.out.println("Fim da escuta.");
-					System.out.println("Nenhuma requisição foi estabelecida.");
-				}
-			});
 		} catch(Exception e){
 			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

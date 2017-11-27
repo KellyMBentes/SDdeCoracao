@@ -20,6 +20,7 @@ public class APIComunicacao {
 
 	public static void enviar(ObjetoComunicacaoCliente obj){
 		try{
+			obj.resultado = null;
 			SocketCliente cliente = FabricaCliente.getCliente(tipo);
 
 			String ip = obj.getIp();

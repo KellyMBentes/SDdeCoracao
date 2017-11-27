@@ -25,7 +25,7 @@ public abstract class ObjetoComunicacao {
 	private int timeout;
 	private String ipCliente;
 	private int portaCliente;
-	public String resultado;
+	public String resultado = null;
 
 	public ObjetoComunicacao(String ip, int porta, String ipDest, int portaDest, String dado, int timeout) throws java.lang.Exception{
 		this.setIp(ip);

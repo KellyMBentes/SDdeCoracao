@@ -22,8 +22,10 @@ public class Test2{
 					System.out.println("Nenhuma requisição foi estabelecida.");
 				}
 			};
+			APIComunicacao.enviar(occ);		
+			System.out.println(">> Resultado da consulta 1: "+occ.resultado);
 			APIComunicacao.enviar(occ);
-			APIComunicacao.enviar(occ);
+			System.out.println(">> Resultado da consulta 2: "+occ.resultado);
 
 		} catch(Exception e){
 			System.err.println(e.getMessage());

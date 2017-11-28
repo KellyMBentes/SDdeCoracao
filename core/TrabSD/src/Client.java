@@ -57,7 +57,7 @@ public class Client {
     }
     
     public void updateEnd(){
-    	MySqlCon.excuteUpdate("UPDATE `DB_MIDDLEWARE`.`client` SET `ADDRESS` = "+endereco+" WHERE `ID` = "+id);
+    	MySqlCon.excuteUpdate("UPDATE `DB_MIDDLEWARE`.`client` SET address = '"+endereco+"' WHERE id = "+id);
     }
     
     @Override

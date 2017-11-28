@@ -1,17 +1,10 @@
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import lib.Debug;
-
 public class TrabSD {
 
-	private static final String FORMATO_PARAMETRO = "-{:nome:}";
-
 	public static void main(String[] args) {
-//		ControlShared.getInstance().setLocalIp(getParametro("ipLocal", args));
-		//Debug.DEBUG = getParametro("debug", args).trim().equals("true");
 
 		System.out.println("*****Thread: Main started*****");
 		
@@ -22,9 +15,7 @@ public class TrabSD {
 		
 		System.out.println("--O ip local eh: "+ cs.localIP);
 		
-//		Thread listenSub = new Thread(new ListenSubscriber());
 		Thread msgSender = new Thread(new TemporizadorEnvioMsg());
-//		listenSub.start();
 		msgSender.start();
 
 //		Thread[] bgThreads = new Thread[4]; // Background Threads holder
@@ -34,14 +25,13 @@ public class TrabSD {
 		
 		
 		//Cria Thread que escuta novos clientes
-//		bgThreads[2] = new Thread(new ListenSubscriber());
+//		bgThreads[1] = new Thread(new ListenSubscriber());
 		
 		//Cria Thread que envia msgs de tempo em tempo
-//		bgThreads[3] = new Thread(new TemporizadorEnvioMsg());
+//		bgThreads[2] = new Thread(new TemporizadorEnvioMsg());
 		
 		// Cria Thread responsavel em manter lista de subscribers vivos
-//		bgThreads[4] = new Thread(){
-//		new Thread(){
+//		bgThreads[3] = new Thread(){
 //			public void run(){
 //				System.out.println("*****Thread: auxMain started*****");
 //				
@@ -93,7 +83,6 @@ public class TrabSD {
 //				System.out.println("****Thread: auxMain terminando****");
 //			}
 //		};
-//		}.start();
 		
 		// Inicia Threads
 //		for(Thread t : bgThreads){
@@ -112,7 +101,7 @@ public class TrabSD {
 //	            			t.interrupt();
 //	            		}
 //                	}
-//                	listenSub.interrupt();
+                	msgSender.interrupt();
                 	
                     keepWaiting = false;
                 }
@@ -120,18 +109,7 @@ public class TrabSD {
         }
 		
 		System.out.println("****Thread: Main terminando****");
-	
+		System.exit(0);
 	}
-
-	private static String getParametro(String nomeParametro, String args[]){
-        String resultado = null;
-        String nomeParametroFormatado = FORMATO_PARAMETRO.replace("{:nome:}",nomeParametro);
-        for (int i = 0; i < args.length; i++){
-            if(args[i].equals(nomeParametroFormatado) && i+1 < args.length){
-                resultado = args[i+1];
-            }
-        }
-        return resultado;
-    }
 	
 }

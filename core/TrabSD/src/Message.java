@@ -1,6 +1,5 @@
 public class Message {
     private int[] tags;
-//	private int a, b, c;
     private String content;
     
     public Message(int a, int b, int c, String msg){
@@ -8,9 +7,6 @@ public class Message {
     	this.tags[0] = a;
         this.tags[1] = b;
         this.tags[2] = c;
-//    	this.a = a;
-//    	this.b = b;
-//    	this.c = c;
         this.content = msg;
     }
     
@@ -31,7 +27,6 @@ public class Message {
     }
     
     public int saveInBD(){
-//    	return MySqlCon.executeInsert("INSERT INTO `DB_MIDDLEWARE`.`message` (`tag_A`,`tag_B`,`tag_C`,`content`) VALUES ("+a+","+b+","+c+",'"+content+"');");
     	return MySqlCon.executeInsert("INSERT INTO `DB_MIDDLEWARE`.`message` (`tag_A`,`tag_B`,`tag_C`,`content`) VALUES ("+tags[0]+","+tags[1]+","+tags[2]+",'"+content+"');");
     }
 }

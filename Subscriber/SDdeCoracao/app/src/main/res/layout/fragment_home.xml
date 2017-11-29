@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="desafiomobfiq.com.sddecoracao.fragment.HomeFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/ll_ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IP: "
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/edt_ip"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <CheckBox
+        android:id="@+id/cb_tag1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_ip"
+        android:text="Tag A"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"/>
+    <CheckBox
+        android:id="@+id/cb_tag2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cb_tag1"
+        android:text="Tag B"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true" />
+    <CheckBox
+        android:id="@+id/cb_tag3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cb_tag2"
+        android:text="Tag C"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/btn_cadastrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cb_tag3"
+        android:layout_centerHorizontal="true"
+        android:text="Cadastrar"/>
+</RelativeLayout>

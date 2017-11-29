@@ -1,12 +1,20 @@
-import java.net.InetAddress;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TrabSD {
 
 	public static void main(String[] args) {
+//		boolean resposta;
+//		resposta = runSystemCommand("Ping -n 2 abacate.ic.uff.br", "abacate.ic.uff.br");
+//		System.out.println("Resposta foi: "+ resposta);
+//		resposta = runSystemCommand("Ping -n 2 10.1.29.125", "10.1.29.125");
+//		System.out.println("Resposta foi: "+ resposta);
+//		
+//		System.exit(0);
 
 		System.out.println("*****Thread: Main started*****");
+		System.out.println("Digite 's' para encerrar.");
 		
 		// Cria Singleton do controle de variaveis compartilhadas
 		ControlShared cs = ControlShared.getInstance();
@@ -45,7 +53,6 @@ public class TrabSD {
 					
 					// Verifica se clientes estao vivos de tempo em tempo
 					if(!cs.idsAtivos.isEmpty()){
-						InetAddress iNet;
 						ArrayList<Integer> toRemoveList = new ArrayList<Integer>();
 						
 						System.out.print("Lista ids ativos: {");
@@ -54,20 +61,20 @@ public class TrabSD {
 						}
 						System.out.println("}");
 						
-						for(int id : cs.idsAtivos){
-							for (Client cli : cs.listaClientes){
+						ArrayList<Integer> tempAtivos = cs.idsAtivos;
+						ArrayList<Client> tempClients = cs.listaClientes;
+						
+						for(int id : tempAtivos){
+							for (Client cli : tempClients){
 								if(id == cli.getId()){
-									System.out.println("Entrei no if.");
 									try {
-										iNet = InetAddress.getByName(cli.getEndereco());
-										if(!iNet.isReachable(500)){
-											System.out.println("--Cliente id: "+cli.getId()+" não respondeu ping.");
+										if(!runSystemCommand("Ping -n 2 "+cli.getEndereco(), cli.getEndereco())){
+//											System.out.println("--Cliente id: "+cli.getId()+" não respondeu ping.");
 											toRemoveList.add(id);
 										}
-										else{System.out.println("--Ping deu certo pro id: "+cli.getId());}
+//										else{System.out.println("--Ping deu certo pro id: "+cli.getId());}
 											
 									} catch (Exception e) {
-										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
 								}
@@ -107,6 +114,29 @@ public class TrabSD {
 		
 		System.out.println("****Thread: Main terminando****");
 		System.exit(0);
+	}
+	
+	public static boolean runSystemCommand(String command, String ip) {
+		boolean ans = true;
+		
+	    try {
+	        Process p = Runtime.getRuntime().exec(command);
+	        BufferedReader inputStream = new BufferedReader(
+	                new InputStreamReader(p.getInputStream()));
+
+	        String s = "";
+	        // reading output stream of the command
+	        while ((s = inputStream.readLine()) != null) {
+//	            System.out.println(s);
+	            if(s.equals("Request timed out.") || s.matches("Reply from(.*): Destination host unreachable.")){
+	            	ans = false;
+	            }
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return ans;
 	}
 	
 }

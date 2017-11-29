@@ -28,7 +28,7 @@ public class TemporizadorEnvioMsg implements Runnable {
 				if(cs.idsAtivos.contains(msg.getIdClient())){
 					System.out.println("Enviando msg: "+msg.getContent()+" -> para ip: "+msg.getClientEnd());
 					try {
-						ObjetoComunicacaoCliente occ = new ObjetoComunicacaoCliente(cs.localIP, 5003, msg.getClientEnd(), 5003, msg.getContent(), 500) {
+						ObjetoComunicacaoCliente occ = new ObjetoComunicacaoCliente(cs.localIP, 5005, msg.getClientEnd(), 8080, msg.getContent(), 500) {
 							
 							@Override
 							public void fimEscuta() {}
@@ -39,7 +39,7 @@ public class TemporizadorEnvioMsg implements Runnable {
 							}
 						};
 						APIComunicacao.enviar(occ);
-						
+						System.out.println("Resposta foi: "+occ.resultado);
 						if(occ.resultado.equals("ok")){
 							MySqlCon.confirmReceived(msg.getId());
 							System.out.println("Mensagem recebida com sucesso no ip: "+msg.getClientEnd());

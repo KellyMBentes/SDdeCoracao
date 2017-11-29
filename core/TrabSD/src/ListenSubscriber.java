@@ -12,6 +12,9 @@ public class ListenSubscriber implements Runnable{
 		//Inicializa Clientes
 		cs.listaClientes.clear();
 		cs.listaClientes.addAll(MySqlCon.getClients());
+		for(Client c : cs.listaClientes){
+			cs.idsAtivos.add(c.getId());
+		}
 		
 		// Chama API para escutar subscriber
 		try {
@@ -56,7 +59,7 @@ public class ListenSubscriber implements Runnable{
 					if (!cs.idsAtivos.contains(subscriber.getId()))
 						cs.idsAtivos.add(subscriber.getId());
 					
-					return (subscriber.getId()+"");
+					return (String.valueOf(subscriber.getId()));
 				}
 
 				public void erro(Exception e) {

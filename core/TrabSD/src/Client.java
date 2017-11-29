@@ -48,7 +48,7 @@ public class Client {
     }
     
     public void saveInBD() throws Exception{
-    	int autoId = MySqlCon.executeInsert("INSERT INTO `DB_MIDDLEWARE`.`client` (tag_A,tag_B,tag_C,address) VALUES ("+tags[0]+","+tags[1]+","+tags[2]+",'"+endereco+"')");
+    	int autoId = MySqlCon.executeInsert("insert into `db_middleware`.`client` (tag_A,tag_B,tag_C,address) values ("+tags[0]+","+tags[1]+","+tags[2]+",'"+endereco+"')");
     	
     	if(autoId < 0)
     		throw new Exception("Auto Key de ID foi retornado como "+autoId);
@@ -57,7 +57,7 @@ public class Client {
     }
     
     public void updateEnd(){
-    	MySqlCon.excuteUpdate("UPDATE `DB_MIDDLEWARE`.`client` SET address = '"+endereco+"' WHERE id = "+id);
+    	MySqlCon.excuteUpdate("update `db_middleware`.`client` set address = '"+endereco+"' where id = "+id);
     }
     
     @Override

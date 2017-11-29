@@ -27,6 +27,6 @@ public class Message {
     }
     
     public int saveInBD(){
-    	return MySqlCon.executeInsert("INSERT INTO `DB_MIDDLEWARE`.`message` (`tag_A`,`tag_B`,`tag_C`,`content`) VALUES ("+tags[0]+","+tags[1]+","+tags[2]+",'"+content+"');");
+    	return MySqlCon.executeInsert("insert into `db_middleware`.`message` (`tag_A`,`tag_B`,`tag_C`,`content`) values ("+tags[0]+","+tags[1]+","+tags[2]+",'"+content+"');");
     }
 }

@@ -48,7 +48,7 @@ public final class MySqlCon {
             Connection con=DriverManager.getConnection(CON_STRING,USERNAME,PASSWORD);  
             //here db_middleware is database name  
             Statement stmt=con.createStatement();  
-            stmt.executeUpdate("UPDATE `db_middleware`.`message_client` SET received = 1 WHERE id = "+id);
+            stmt.executeUpdate("update `db_middleware`.`message_client` set received = 1 where id = "+id);
             
             con.close();
         }catch(Exception e){ System.out.println(e);}
@@ -61,7 +61,7 @@ public final class MySqlCon {
             Connection con=DriverManager.getConnection(CON_STRING,USERNAME,PASSWORD);  
             //here db_middleware is database name  
             Statement stmt=con.createStatement();  
-            ResultSet rs=stmt.executeQuery("SELECT MC.id, MC.id_client, C.address, M.content, MC.received FROM DB_MIDDLEWARE.message_client AS MC JOIN DB_MIDDLEWARE.client AS C ON MC.id_client = C.id JOIN DB_MIDDLEWARE.message AS M ON MC.id_message = M.id WHERE MC.received = 0;");           
+            ResultSet rs=stmt.executeQuery("select mc.id, mc.id_client, c.address, m.content, mc.received from `db_middleware`.`message_client` as mc join `db_middleware`.`client` as c on mc.id_client = c.id join `db_middleware`.`message` as m on mc.id_message = m.id where mc.received = 0;");           
             while(rs.next()) 
             	ans.add(new MensagemParaEnviar(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5)));  
             con.close();  
@@ -77,7 +77,7 @@ public final class MySqlCon {
             Connection con=DriverManager.getConnection(CON_STRING,USERNAME,PASSWORD);  
             //here db_middleware is database name  
             Statement stmt=con.createStatement();  
-            ResultSet rs=stmt.executeQuery("SELECT * FROM DB_MIDDLEWARE.client");           
+            ResultSet rs=stmt.executeQuery("select * from `db_middleware`.`client`");           
             while(rs.next())
             	ans.add(new Client(rs.getInt(1), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getString(2)));  
             con.close();  
